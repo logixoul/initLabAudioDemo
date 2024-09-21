@@ -1,1 +1,7 @@
-NAudio has "signal chains"
+NAudio has "signal chains".
+WebAudio has GainNode, OscillatorNode, BiquadFilterNode etc
+
+I'll use the Live Server Extension in VSCode.
+Press "Go Live" in the bottom right.
+
+Better to use "Live Preview" VSCode ext. I somehow made it work (was getting error 401 for main.js) but look into that again...

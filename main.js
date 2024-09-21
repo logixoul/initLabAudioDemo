@@ -1,3 +1,5 @@
+import { SystemAudioGlue } from "./SystemAudioGlue.js";
+
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 let context = new AudioContext();
@@ -24,6 +26,8 @@ let volume = 0.2,
   tone = 441
 
 document.addEventListener("keydown", () => {
-    playSound();
+    //playSound();
+    let glue = new SystemAudioGlue();
+    glue.playSineWave();
     console.log("playing")
 });
