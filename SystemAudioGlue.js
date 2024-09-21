@@ -1,5 +1,5 @@
 export class SystemAudioGlue {
-    async playSineWave() {
+    async runAudioWorklet() {
         const audioContext = new AudioContext();
   
         // Load the AudioWorkletProcessor from an external file

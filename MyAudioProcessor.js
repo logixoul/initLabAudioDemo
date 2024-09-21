@@ -14,9 +14,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             const outputChannel = output[channel];
 
             for (let i = 0; i < outputChannel.length; i++) {
-                // Generate sine wave sample
                 outputChannel[i] = Math.sin(this.phase);
-                // Update phase
                 this.phase += (2 * Math.PI * this.frequency) / sampleRate;
             }
         }
