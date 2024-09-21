@@ -1,6 +1,6 @@
-import { SystemAudioGlue } from "./SystemAudioGlue.js";
+import { SystemAudioInitializer } from "./SystemAudioInitializer.js";
 
 document.addEventListener("keydown", () => {
-    let glue = new SystemAudioGlue();
-    glue.runAudioWorklet();
+    let initter = new SystemAudioInitializer();
+    initter.runAudioWorklet();
 });
