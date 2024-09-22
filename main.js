@@ -1,6 +1,10 @@
 import { SystemAudioInitializer } from "./SystemAudioInitializer.js";
 
-document.addEventListener("keydown", () => {
-    let initter = new SystemAudioInitializer();
-    initter.runAudioWorklet();
-});
+export function main() {
+    let initter = null;
+
+    document.addEventListener("keydown", () => {
+        initter = new SystemAudioInitializer();
+        initter.runAudioWorklet();
+    });
+}

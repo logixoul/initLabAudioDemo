@@ -1,22 +1,25 @@
+import { SineOscillator } from "./SineOscillator.js"
+
 class MyAudioProcessor extends AudioWorkletProcessor {
+    osc;
     constructor() {
         super();
-        this.phase = 0;
+        this.osc = new SineOscillator();
+        //this.phase = 0;
     }
 
     process(inputs, outputs, parameters) {
-        const output = outputs[0];
-        const frequency = 440;
+        const outputChannels = outputs[0];
 
-        for (let channel = 0; channel < output.length; channel++) {
-            const outputChannel = output[channel];
-
-            for (let i = 0; i < outputChannel.length; i++) {
-                outputChannel[i] = Math.sin(this.phase);
-                this.phase += (2 * Math.PI * frequency) / sampleRate;
+        for (let i = 0; i < outputChannels[0].length; i++) {
+            let sample = this.osc.nextSample();
+            for (let channel = 0; channel < outputChannels.length; channel++) {
+                const outputChannel = outputChannels[channel];
+                outputChannel[i] = sample;
+                //outputChannel[i] = Math.sin(i);
             }
         }
-
+    
         // Keep the processor alive
         return true;
     }
