@@ -4,7 +4,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
     osc;
     constructor() {
         super();
-        this.osc = new SineOscillator();
+        this.osc = new SineOscillator(sampleRate);
         //this.phase = 0;
     }
 
