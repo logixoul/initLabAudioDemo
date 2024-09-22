@@ -1,12 +1,23 @@
-import { SystemAudioInitializer } from "./SystemAudioInitializer.js";
+import { AudioThreadManager } from "./AudioThreadManager.js";
 
 export function main() {
-    let initter = null;
+    let audioThreadRunning = false;
+    let audioThreadManager = new AudioThreadManager();
 
-    document.addEventListener("keydown", () => {
-        if(initter != null)
-            return;
-        initter = new SystemAudioInitializer();
-        initter.runAudioWorklet();
+    document.getElementById("powerSlider").onchange = (e) => {
+        console.log(e.target.value);
+        audioThreadManager.setPower(e.target.value)
+    };
+
+    document.addEventListener("keydown", (e) => {
+        if(!audioThreadRunning) {
+            audioThreadManager.launchThread();
+            audioThreadRunning = true;
+        }
+        if(e.code == "KeyN") {
+            audioThreadManager.playNote();
+        }
     });
+
+    document.add
 }
