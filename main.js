@@ -4,9 +4,11 @@ export function main() {
     let audioThreadRunning = false;
     let audioThreadManager = new AudioThreadManager();
 
-    document.getElementById("powerSlider").onchange = (e) => {
-        console.log(e.target.value);
-        audioThreadManager.setPower(e.target.value)
+    document.getElementById("shapingSlider").onchange = (e) => {
+        audioThreadManager.postMessage({
+            name: "setShaping",
+            value: e.target.value
+        });
     };
 
     document.addEventListener("keydown", (e) => {
@@ -15,7 +17,10 @@ export function main() {
             audioThreadRunning = true;
         }
         if(e.code == "KeyN") {
-            audioThreadManager.playNote();
+            audioThreadManager.postMessage({
+                name: "playNote",
+                value: 440
+            });
         }
     });
 

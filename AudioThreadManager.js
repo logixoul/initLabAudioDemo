@@ -15,11 +15,8 @@ export class AudioThreadManager {
             await audioContext.resume();
         }
     }
-    setPower(power) {
-        this.audioWorkletNode.port.postMessage({
-            name: "setPower",
-            value: power
-        });
+    postMessage(data) {
+        this.audioWorkletNode.port.postMessage(data);
     }
     playNote() {
         this.audioWorkletNode.port.postMessage("hey");
