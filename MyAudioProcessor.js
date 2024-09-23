@@ -47,6 +47,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 sample += note.nextSample();
             sample = this.filter.processSample(sample);
             sample = this.echo.processSample(sample);
+            sample *= .7;
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
                 outputChannel[i] = sample;
