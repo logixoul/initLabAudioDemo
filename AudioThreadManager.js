@@ -18,7 +18,4 @@ export class AudioThreadManager {
     postMessage(data) {
         this.audioWorkletNode.port.postMessage(data);
     }
-    playNote() {
-        this.audioWorkletNode.port.postMessage("hey");
-    }
 }

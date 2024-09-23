@@ -8,7 +8,7 @@ class Note {
     }
     nextSample() {
         this.sampleIndex++;
-        return this.osc.nextSample()*Math.pow(0.99999, this.sampleIndex)
+        return this.osc.nextSample()*Math.pow(0.9999, this.sampleIndex)
     }
 }
 
@@ -27,6 +27,8 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.notes.push(new Note(e.data.value, this.shaping))
             }
         };
+
+        this.filterState = 0;
     }
 
     process(inputs, outputs, parameters) {
@@ -35,9 +37,11 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             let sample = 0;
             for(const note of this.notes)
                 sample += note.nextSample();
+            this.filterState = sample;
+            //this.filterState += (sample-this.filterState)*.0009;
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
-                outputChannel[i] = sample;
+                outputChannel[i] = this.filterState;
             }
         }
     
