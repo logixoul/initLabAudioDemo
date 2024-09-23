@@ -22,13 +22,15 @@ class Note {
 }
 
 class DrumHit extends Note {
+    frequencyStep;
     constructor(frequency, configuration) {
         const osc = new SquareOscillator(frequency, configuration)
         super(osc);
+        this.frequencyStep = frequency / 10000;
     }
 
     nextSample() {
-        this.osc.frequency -= 0.01;
+        this.osc.frequency -= this.frequencyStep;
         //const envelopeValue = Math.pow(0.9999, this.sampleIndex);
         //if(envelopeValue < 0.0001)
         //    this._isFinished = true;

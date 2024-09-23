@@ -64,7 +64,7 @@ export class App {
             await sleep(500);
             this.sendDrum(120);
             await sleep(500);
-            this.sendDrum(240);
+            this.sendDrum(480);
             await sleep(500);
         }
     }
