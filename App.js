@@ -17,7 +17,7 @@ export class App {
     configuration = new Configuration();
 
     constructor() {
-        document.getElementById("filterCutoff").onchange = (e) => {
+        document.getElementById("filterCutoff").oninput = (e) => {
             this.configuration.filterCutoff = Number(e.target.value);
             console.log("slider val = ", e.target.value)
             this.onConfigurationChanged();

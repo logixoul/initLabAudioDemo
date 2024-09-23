@@ -1,7 +1,4 @@
 export class AudioThreadManager {
-    constructor() {
-
-    }
     audioContext;
     sampleRate() {
         return this.audioContext.sampleRate;
