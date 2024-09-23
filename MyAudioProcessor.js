@@ -10,10 +10,10 @@ class Note {
     }
     nextSample() {
         this.sampleIndex++;
-        const sample = this.osc.nextSample()*Math.pow(0.9999, this.sampleIndex);
-        if(sample < 0.0001)
+        const envelopeValue = Math.pow(0.9999, this.sampleIndex);
+        if(envelopeValue < 0.0001)
             this._isFinished = true;
-        return sample;
+        return this.osc.nextSample()*envelopeValue;
     }
     isFinished() {
         return this._isFinished;
@@ -35,6 +35,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 const osc = new SineOscillator(sampleRate, e.data.value, this.shaping);
                 //const osc = new SquareOscillator(sampleRate, e.data.value);
                 this.notes.push(new Note(this.shaping, osc))
+                console.log("note count", this.notes.length)
             }
         };
 
@@ -61,7 +62,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         return true;
     }
     removeFinishedNotes() {
-        return this.notes.filter(note => !note.isFinished())
+        this.notes = this.notes.filter(note => !note.isFinished())
     }
 }
 
