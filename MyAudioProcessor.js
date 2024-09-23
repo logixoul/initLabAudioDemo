@@ -21,7 +21,6 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.echo = new EffectTypes.Echo(this.configuration); // reset the echo with the new config
             }
             console.log(e.data);
-            //this.port.postMessage("pong");
             if(e.data.name == "playNote") {
                 const osc = new (eval(this.configuration.oscillatorClassName))(e.data.frequency, this.configuration);
                 this.notes.push(new NoteTypes.Note(osc));
@@ -33,8 +32,6 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.notes.push(new NoteTypes.SnareHit());
             }
         };
-
-        //this.filterState = 0;
     }
 
     process(inputs, outputs, parameters) {

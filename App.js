@@ -72,28 +72,20 @@ export class App {
         while(true) {
             this.sendDrum(120);
             await sleep(250);
-            this.audioThreadManager.postMessage({
-                name: "playSnare",
-            });
+            this.audioThreadManager.postMessage({name: "playSnare"});
             await sleep(250);
             this.sendDrum(480);
             await sleep(250);
-            this.audioThreadManager.postMessage({
-                name: "playSnare",
-            });
+            this.audioThreadManager.postMessage({name: "playSnare"});
             await sleep(250);
 
-            this.audioThreadManager.postMessage({
-                name: "playSnare",
-            });
+            this.audioThreadManager.postMessage({name: "playSnare"});
             await sleep(250);
             this.sendDrum(120);
             await sleep(250);
             this.sendDrum(480);
             await sleep(250);
-            this.audioThreadManager.postMessage({
-                name: "playSnare",
-            });
+            this.audioThreadManager.postMessage({name: "playSnare"});
             await sleep(250);
         }
     }

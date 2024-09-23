@@ -1,6 +1,3 @@
-NAudio has "signal chains".
-WebAudio has GainNode, OscillatorNode, BiquadFilterNode etc
-
 I'll use the Live Server Extension in VSCode.
 Press "Go Live" in the bottom right.
 
