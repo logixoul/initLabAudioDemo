@@ -2,11 +2,16 @@
 <html>
 	<head>
 	<script type="module">
-		import { main } from "./main.js"
-		main();
+		import { App } from "./main.js"
+		const app = new App();
 	</script>
 	</head>
 	<body>
 		<input type="range" id="shapingSlider" min="0.1" max="2" step="any"/>
+		<select id="oscillatorSelection">
+			<option value="SineOscillator">Sine</option>
+			<option value="SquareOscillator">Square</option>
+			<option value="SawOscillator">Saw</option>
+		</select>
 	</body>
 </html>
