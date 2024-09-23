@@ -6,6 +6,11 @@ class Configuration {
     sampleRate;
 }
 
+// https://stackoverflow.com/questions/951021
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export class App {
     audioThreadRunning = false;
     audioThreadManager = new AudioThreadManager();
@@ -29,6 +34,8 @@ export class App {
                 this.onConfigurationChanged();
             
                 this.audioThreadRunning = true;
+
+                this.runDrumLoop();
                 console.log("launched")
             }
             const noteIndex = this.characterToNoteIndex(e.key)
@@ -42,6 +49,26 @@ export class App {
         });
     }
 
+    sendDrum(frequency) {
+        this.audioThreadManager.postMessage({
+            name: "playDrum",
+            frequency: frequency
+        });
+    }
+
+    async runDrumLoop() {
+        while(true) {
+            this.sendDrum(120);
+            await sleep(500);
+            this.sendDrum(120);
+            await sleep(500);
+            this.sendDrum(120);
+            await sleep(500);
+            this.sendDrum(240);
+            await sleep(500);
+        }
+    }
+    
     onConfigurationChanged() {
         this.audioThreadManager.postMessage({
             name: "setConfiguration",
@@ -74,9 +101,4 @@ export class App {
         }
         return null;
     }
-}
-
-export function main() {
-    
-
 }
