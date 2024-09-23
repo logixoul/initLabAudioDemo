@@ -4,7 +4,7 @@ import { SquareOscillator } from "./SquareOscillator.js";
 class Note {
     osc;
     _isFinished = false;
-    constructor(shaping, oscillator) {
+    constructor(oscillator) {
         this.osc = oscillator;
         this.sampleIndex = 0;
     }
@@ -21,21 +21,19 @@ class Note {
 }
 
 class MyAudioProcessor extends AudioWorkletProcessor {
-    shaping = 1;
+    configuration = null;
+    notes = [];
     constructor() {
         super();
-        this.notes = []
 
         this.port.onmessage = (e) => {
-            if(e.data.name == "setShaping")
-                this.shaping = e.data.value;
+            if(e.data.name == "setConfiguration")
+                this.configuration = e.data.value;
             console.log(e.data);
             //this.port.postMessage("pong");
             if(e.data.name == "playNote") {
-                const osc = new SineOscillator(sampleRate, e.data.value, this.shaping);
-                //const osc = new SquareOscillator(sampleRate, e.data.value);
-                this.notes.push(new Note(this.shaping, osc))
-                console.log("note count", this.notes.length)
+                const osc = new (eval(this.configuration.oscillatorClass))(sampleRate, e.data.frequency, this.configuration);
+                this.notes.push(new Note(osc));
             }
         };
 

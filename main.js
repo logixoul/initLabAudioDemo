@@ -1,4 +1,6 @@
 import { AudioThreadManager } from "./AudioThreadManager.js";
+import { SineOscillator } from "./SineOscillator.js";
+import { SquareOscillator } from "./SquareOscillator.js";
 
 function characterToNoteIndex(char) {
     const mapping = {
@@ -21,20 +23,33 @@ function characterToNoteIndex(char) {
     return null;
 }
 
+class Configuration {
+    sineShaping = 1;
+    oscillatorClass = "SineOscillator";
+}
+
 export function main() {
     let audioThreadRunning = false;
     let audioThreadManager = new AudioThreadManager();
-
+    let configuration = new Configuration();
+    
     document.getElementById("shapingSlider").onchange = (e) => {
+        configuration.sineShaping = e.target.value
         audioThreadManager.postMessage({
-            name: "setShaping",
-            value: e.target.value
+            name: "setConfiguration",
+            value: configuration
         });
     };
 
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", async (e) => {
         if(!audioThreadRunning) {
-            audioThreadManager.launchThread();
+            await audioThreadManager.launchThread();
+            //let sineOscFactory = (sampleRate, frequency) => new SineOscillator(sampleRate, frequency, 1);
+            audioThreadManager.postMessage({
+                name: "setConfiguration",
+                value: configuration
+            });
+        
             audioThreadRunning = true;
             console.log("launched")
         }
@@ -43,10 +58,8 @@ export function main() {
             const powerBase = Math.pow(2, 1/12);
             audioThreadManager.postMessage({
                 name: "playNote",
-                value: 440 * Math.pow(powerBase, noteIndex)
+                frequency: 440 * Math.pow(powerBase, noteIndex)
             });
         }
     });
-
-    document.add
 }
