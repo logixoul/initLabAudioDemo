@@ -17,6 +17,8 @@ export class App {
     configuration = new Configuration();
 
     constructor() {
+        this.configuration.sampleRate = this.audioThreadManager.sampleRate();
+
         document.getElementById("shapingSlider").onchange = (e) => {
             this.configuration.sineShaping = e.target.value
             this.onConfigurationChanged();
@@ -28,15 +30,16 @@ export class App {
         };
 
         document.addEventListener("keydown", async (e) => {
-            if(!this.audioThreadRunning) {
-                await this.audioThreadManager.launchThread();
-                this.configuration.sampleRate = this.audioThreadManager.sampleRate();
-                this.onConfigurationChanged();
-            
-                this.audioThreadRunning = true;
+            if(e.key == " ") {
+                if(!this.audioThreadRunning) {
+                    await this.audioThreadManager.launchThread();
+                    this.onConfigurationChanged();
+                
+                    this.audioThreadRunning = true;
 
-                this.runDrumLoop();
-                console.log("launched")
+                    this.runDrumLoop();
+                    console.log("launched")
+                }
             }
             const noteIndex = this.characterToNoteIndex(e.key)
             if(noteIndex != null) {
