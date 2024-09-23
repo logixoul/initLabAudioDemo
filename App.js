@@ -18,7 +18,8 @@ export class App {
 
     constructor() {
         document.getElementById("filterCutoff").onchange = (e) => {
-            this.configuration.filterCutoff = e.target.value;
+            this.configuration.filterCutoff = Number(e.target.value);
+            console.log("slider val = ", e.target.value)
             this.onConfigurationChanged();
         };
 
