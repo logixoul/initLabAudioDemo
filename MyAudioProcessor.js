@@ -21,6 +21,22 @@ class Note {
     }
 }
 
+class Drum extends Note {
+    constructor(frequency) {
+        super()
+        this.osc = new SquareOscillator()
+    }
+
+    nextSample() {
+        this.frequency -= 10;
+        this.sampleIndex++;
+        const envelopeValue = Math.pow(0.9999, this.sampleIndex);
+        if(envelopeValue < 0.0001)
+            this._isFinished = true;
+        return this.osc.nextSample()*envelopeValue;
+    }
+}
+
 class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
     notes = [];
@@ -33,7 +49,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             console.log(e.data);
             //this.port.postMessage("pong");
             if(e.data.name == "playNote") {
-                const osc = new (eval(this.configuration.oscillatorClass))(sampleRate, e.data.frequency, this.configuration);
+                const osc = new (eval(this.configuration.oscillatorClass))(e.data.frequency, this.configuration);
                 this.notes.push(new Note(osc));
             }
         };

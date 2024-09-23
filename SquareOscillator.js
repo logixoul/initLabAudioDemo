@@ -1,13 +1,14 @@
 export class SquareOscillator {
-    constructor(sampleRate, frequency) {
+    configuration;
+    constructor(frequency, configuration) {
         this.frequency = frequency;
         this.phase = 0;
-        this.sampleRate = sampleRate;
+        this.configuration = configuration;
     }
 
     nextSample() {
         let sample = Math.sin(this.phase);
-        this.phase += (2 * Math.PI * this.frequency) / this.sampleRate;
+        this.phase += (2 * Math.PI * this.frequency) / this.configuration.sampleRate;
         return sample < 0 ? -1: 1;
     }
 }

@@ -3,6 +3,7 @@ import { AudioThreadManager } from "./AudioThreadManager.js";
 class Configuration {
     sineShaping = 1;
     oscillatorClass = "SineOscillator";
+    sampleRate;
 }
 
 export class App {
@@ -24,7 +25,7 @@ export class App {
         document.addEventListener("keydown", async (e) => {
             if(!this.audioThreadRunning) {
                 await this.audioThreadManager.launchThread();
-                
+                this.configuration.sampleRate = this.audioThreadManager.sampleRate();
                 this.onConfigurationChanged();
             
                 this.audioThreadRunning = true;
