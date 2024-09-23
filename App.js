@@ -71,17 +71,17 @@ export class App {
     async runDrumLoop() {
         while(true) {
             this.sendDrum(120);
-            await sleep(500);
+            await sleep(250);
             this.audioThreadManager.postMessage({
                 name: "playSnare",
             });
-            await sleep(500);
-            this.sendDrum(120);
-            await sleep(500);
+            await sleep(250);
+            this.sendDrum(240);
+            await sleep(250);
             this.audioThreadManager.postMessage({
                 name: "playSnare",
             });
-            await sleep(500);
+            await sleep(250);
         }
     }
     

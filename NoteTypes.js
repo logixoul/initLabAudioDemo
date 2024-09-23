@@ -28,8 +28,9 @@ export class DrumHit extends Note {
     }
 
     nextSample() {
-        this.osc.frequency -= this.frequencyStep;
-        if(this.osc.frequency <= 0)
+        //this.osc.frequency -= this.frequencyStep;
+        this.osc.frequency *= 0.9998;
+        if(this.osc.frequency <= 10)
             this._isFinished = true;
         return this.osc.nextSample();
     }

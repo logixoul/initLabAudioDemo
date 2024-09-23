@@ -5,6 +5,7 @@ export class AudioThreadManager {
     }
 
     async launchThread() {
+        // An AudioContext is a graph of audio modules (nodes)
         this.audioContext = new AudioContext();
         await this.audioContext.audioWorklet.addModule('MyAudioProcessor.js');
         this.audioWorkletNode = new AudioWorkletNode(this.audioContext, 'MyAudioProcessor');
