@@ -43,7 +43,7 @@ export class App {
                     this.audioThreadRunning = true;
 
                     this.runDrumLoop();
-                    console.log("launched")
+                    document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
                 }
             }
             const noteIndex = this.characterToNoteIndex(e.key)

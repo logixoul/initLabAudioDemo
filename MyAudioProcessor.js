@@ -2,20 +2,23 @@ import { SineOscillator } from "./SineOscillator.js"
 import { SquareOscillator } from "./SquareOscillator.js";
 import { SawOscillator } from "./SawOscillator.js";
 import * as NoteTypes from "./NoteTypes.js";
-import * as FilterTypes from "./FilterTypes.js";
+import * as EffectTypes from "./EffectTypes.js";
 
 class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
     notes = [];
     filter;
+    echo;
     constructor() {
         super();
 
         this.port.onmessage = (e) => {
             if(e.data.name == "setConfiguration") {
                 this.configuration = e.data.value;
-                const filterClass = eval("FilterTypes." + this.configuration.filterClassName)
+                const filterClass = eval("EffectTypes." + this.configuration.filterClassName)
                 this.filter = new filterClass(this.configuration); // reset the filter with the new config
+
+                this.echo = new EffectTypes.Echo(this.configuration);
             }
             console.log(e.data);
             //this.port.postMessage("pong");
@@ -43,8 +46,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             for(const note of this.notes)
                 sample += note.nextSample();
             sample = this.filter.processSample(sample);
-            //this.filterState = sample;
-            //this.filterState += (sample-this.filterState)*.009;
+            //sample = this.echo.processSample(sample);
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
                 outputChannel[i] = sample;

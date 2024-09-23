@@ -39,3 +39,18 @@ export class HighPassFilter {
         return sample - lowpassedSample;
     }
 }
+
+export class Echo {
+    buffer;
+    constructor(configuration) {
+        this.configuration = configuration;
+        this.buffer = new Array(10000)
+        this.buffer.fill(0);
+    }
+    processSample(sample) {
+        this.buffer.splice(0, 1);
+        this.buffer.push(sample);
+        
+        return this.buffer[0] * .5 + this.buffer[this.buffer.length-1];
+    }
+}
