@@ -2,9 +2,7 @@ export class LowPassFilter {
     buffer;
     constructor(configuration) {
         this.configuration = configuration;
-        console.log("will create buffer of size", configuration.filterCutoff)
         this.buffer = new Array(configuration.filterCutoff)
-        console.log("buffer of size ", this.buffer.length, " created");
         this.buffer.fill(0);
     }
     processSample(sample) {
@@ -15,5 +13,29 @@ export class LowPassFilter {
             sum+=value;
         }
         return sum / this.buffer.length;
+    }
+}
+
+export class ExpLowPassFilter {
+    filterState = 0;
+    constructor(configuration) {
+        this.configuration = configuration;
+    }
+    processSample(sample) {
+        const coef = this.configuration.filterCutoff;
+        this.filterState = coef * sample + (1-coef) * this.filterState;
+        return this.filterState;
+    }
+}
+
+export class HighPassFilter {
+    lowPassFilter;
+    constructor(configuration) {
+        this.lowPassFilter = new ExpLowPassFilter(configuration);
+    }
+    processSample(sample) {
+        const lowpassedSample = this.lowPassFilter.processSample(sample);
+
+        return sample - lowpassedSample;
     }
 }

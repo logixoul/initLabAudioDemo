@@ -14,8 +14,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         this.port.onmessage = (e) => {
             if(e.data.name == "setConfiguration") {
                 this.configuration = e.data.value;
-                this.filter = new FilterTypes.LowPassFilter(this.configuration); // reset the filter with the new config
-                console.log("in processor: ", this.configuration.filterCutoff)
+                this.filter = new FilterTypes.HighPassFilter(this.configuration); // reset the filter with the new config
             }
             console.log(e.data);
             //this.port.postMessage("pong");
