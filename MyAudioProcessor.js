@@ -1,5 +1,6 @@
 import { SineOscillator } from "./SineOscillator.js"
 import { SquareOscillator } from "./SquareOscillator.js";
+import { SawOscillator } from "./SawOscillator.js";
 
 class Note {
     osc;
@@ -48,8 +49,8 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             let sample = 0;
             for(const note of this.notes)
                 sample += note.nextSample();
-            //this.filterState = sample;
-            this.filterState += (sample-this.filterState)*.009;
+            this.filterState = sample;
+            //this.filterState += (sample-this.filterState)*.009;
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
                 outputChannel[i] = this.filterState;

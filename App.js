@@ -1,6 +1,4 @@
 import { AudioThreadManager } from "./AudioThreadManager.js";
-import { SineOscillator } from "./SineOscillator.js";
-import { SquareOscillator } from "./SquareOscillator.js";
 
 class Configuration {
     sineShaping = 1;
@@ -15,20 +13,19 @@ export class App {
     constructor() {
         document.getElementById("shapingSlider").onchange = (e) => {
             this.configuration.sineShaping = e.target.value
-            this.audioThreadManager.postMessage({
-                name: "setConfiguration",
-                value: this.configuration
-            });
+            this.onConfigurationChanged();
+        };
+
+        document.getElementById("oscillatorSelection").onchange = (e) => {
+            this.configuration.oscillatorClass = e.target.value
+            this.onConfigurationChanged();
         };
 
         document.addEventListener("keydown", async (e) => {
             if(!this.audioThreadRunning) {
                 await this.audioThreadManager.launchThread();
-                //let sineOscFactory = (sampleRate, frequency) => new SineOscillator(sampleRate, frequency, 1);
-                this.audioThreadManager.postMessage({
-                    name: "setConfiguration",
-                    value: this.configuration
-                });
+                
+                this.onConfigurationChanged();
             
                 this.audioThreadRunning = true;
                 console.log("launched")
@@ -41,6 +38,13 @@ export class App {
                     frequency: 440 * Math.pow(powerBase, noteIndex)
                 });
             }
+        });
+    }
+
+    onConfigurationChanged() {
+        this.audioThreadManager.postMessage({
+            name: "setConfiguration",
+            value: this.configuration
         });
     }
 
@@ -57,7 +61,12 @@ export class App {
             h: 8,
             n: 9,
             j: 10,
-            m: 11        
+            m: 11,
+            ",": 12,
+            l: 13,
+            ".": 14,
+            ";": 15,
+            "/": 16
         };
         if(char in mapping) {
             return mapping[char];
