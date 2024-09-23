@@ -2,7 +2,8 @@ import { AudioThreadManager } from "./AudioThreadManager.js";
 
 class Configuration {
     filterCutoff = 1;
-    oscillatorClass = "SineOscillator";
+    oscillatorClassName = "SineOscillator";
+    filterClassName = "ExpLowPassFilter"
     sampleRate;
 }
 
@@ -24,7 +25,11 @@ export class App {
         };
 
         document.getElementById("oscillatorSelection").onchange = (e) => {
-            this.configuration.oscillatorClass = e.target.value
+            this.configuration.oscillatorClassName = e.target.value;
+            this.onConfigurationChanged();
+        };
+        document.getElementById("filterSelection").onchange = (e) => {
+            this.configuration.filterClassName = e.target.value;
             this.onConfigurationChanged();
         };
 

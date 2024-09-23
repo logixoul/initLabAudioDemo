@@ -14,12 +14,13 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         this.port.onmessage = (e) => {
             if(e.data.name == "setConfiguration") {
                 this.configuration = e.data.value;
-                this.filter = new FilterTypes.HighPassFilter(this.configuration); // reset the filter with the new config
+                const filterClass = eval("FilterTypes." + this.configuration.filterClassName)
+                this.filter = new filterClass(this.configuration); // reset the filter with the new config
             }
             console.log(e.data);
             //this.port.postMessage("pong");
             if(e.data.name == "playNote") {
-                const osc = new (eval(this.configuration.oscillatorClass))(e.data.frequency, this.configuration);
+                const osc = new (eval(this.configuration.oscillatorClassName))(e.data.frequency, this.configuration);
                 this.notes.push(new NoteTypes.Note(osc));
             }
             if(e.data.name == "playDrum") {
