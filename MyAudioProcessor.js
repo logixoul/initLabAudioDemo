@@ -31,12 +31,24 @@ class DrumHit extends Note {
 
     nextSample() {
         this.osc.frequency -= this.frequencyStep;
-        //const envelopeValue = Math.pow(0.9999, this.sampleIndex);
-        //if(envelopeValue < 0.0001)
-        //    this._isFinished = true;
         if(this.osc.frequency <= 0)
             this._isFinished = true;
         return this.osc.nextSample();
+    }
+}
+
+class SnareHit extends Note {
+    constructor() {
+        super(null);
+        this.sampleIndex = 0;
+    }
+
+    nextSample() {
+        this.sampleIndex++;
+        if(this.sampleIndex > 4000)
+            this._isFinished = true;
+
+        return Math.random()*2-1;
     }
 }
 
@@ -57,8 +69,9 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             }
             if(e.data.name == "playDrum") {
                 this.notes.push(new DrumHit(e.data.frequency, this.configuration));
-                console.log("len=", this.notes.length);
-
+            }
+            if(e.data.name == "playSnare") {
+                this.notes.push(new SnareHit());
             }
         };
 

@@ -60,11 +60,15 @@ export class App {
         while(true) {
             this.sendDrum(120);
             await sleep(500);
-            this.sendDrum(120);
+            this.audioThreadManager.postMessage({
+                name: "playSnare",
+            });
             await sleep(500);
             this.sendDrum(120);
             await sleep(500);
-            this.sendDrum(480);
+            this.audioThreadManager.postMessage({
+                name: "playSnare",
+            });
             await sleep(500);
         }
     }
