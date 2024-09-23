@@ -1,14 +1,22 @@
 import { SineOscillator } from "./SineOscillator.js"
+import { SquareOscillator } from "./SquareOscillator.js";
 
 class Note {
     osc;
-    constructor(frequency, shaping) {
-        this.osc = new SineOscillator(sampleRate, frequency, shaping);
+    _isFinished = false;
+    constructor(shaping, oscillator) {
+        this.osc = oscillator;
         this.sampleIndex = 0;
     }
     nextSample() {
         this.sampleIndex++;
-        return this.osc.nextSample()*Math.pow(0.9999, this.sampleIndex)
+        const sample = this.osc.nextSample()*Math.pow(0.9999, this.sampleIndex);
+        if(sample < 0.0001)
+            this._isFinished = true;
+        return sample;
+    }
+    isFinished() {
+        return this._isFinished;
     }
 }
 
@@ -24,7 +32,9 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             console.log(e.data);
             //this.port.postMessage("pong");
             if(e.data.name == "playNote") {
-                this.notes.push(new Note(e.data.value, this.shaping))
+                const osc = new SineOscillator(sampleRate, e.data.value, this.shaping);
+                //const osc = new SquareOscillator(sampleRate, e.data.value);
+                this.notes.push(new Note(this.shaping, osc))
             }
         };
 
@@ -32,13 +42,15 @@ class MyAudioProcessor extends AudioWorkletProcessor {
     }
 
     process(inputs, outputs, parameters) {
+        this.removeFinishedNotes();
+
         const outputChannels = outputs[0];
         for (let i = 0; i < outputChannels[0].length; i++) {
             let sample = 0;
             for(const note of this.notes)
                 sample += note.nextSample();
-            this.filterState = sample;
-            //this.filterState += (sample-this.filterState)*.0009;
+            //this.filterState = sample;
+            this.filterState += (sample-this.filterState)*.009;
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
                 outputChannel[i] = this.filterState;
@@ -47,6 +59,9 @@ class MyAudioProcessor extends AudioWorkletProcessor {
     
         // Keep the processor alive
         return true;
+    }
+    removeFinishedNotes() {
+        return this.notes.filter(note => !note.isFinished())
     }
 }
 
