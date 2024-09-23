@@ -18,7 +18,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 const filterClass = eval("EffectTypes." + this.configuration.filterClassName)
                 this.filter = new filterClass(this.configuration); // reset the filter with the new config
 
-                this.echo = new EffectTypes.Echo(this.configuration);
+                this.echo = new EffectTypes.Echo(this.configuration); // reset the echo with the new config
             }
             console.log(e.data);
             //this.port.postMessage("pong");
@@ -46,7 +46,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             for(const note of this.notes)
                 sample += note.nextSample();
             sample = this.filter.processSample(sample);
-            //sample = this.echo.processSample(sample);
+            sample = this.echo.processSample(sample);
             for (let channel = 0; channel < outputChannels.length; channel++) {
                 const outputChannel = outputChannels[channel];
                 outputChannel[i] = sample;

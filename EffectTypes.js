@@ -44,7 +44,7 @@ export class Echo {
     buffer;
     constructor(configuration) {
         this.configuration = configuration;
-        this.buffer = new Array(10000)
+        this.buffer = new Array(Math.round(10000*configuration.echoDelay))
         this.buffer.fill(0);
     }
     processSample(sample) {

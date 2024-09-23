@@ -5,6 +5,7 @@ class Configuration {
     oscillatorClassName = "SineOscillator";
     filterClassName = "ExpLowPassFilter"
     sampleRate;
+    echoDelay = 0;
 }
 
 // https://stackoverflow.com/questions/951021
@@ -20,7 +21,10 @@ export class App {
     constructor() {
         document.getElementById("filterCutoff").oninput = (e) => {
             this.configuration.filterCutoff = Number(e.target.value);
-            console.log("slider val = ", e.target.value)
+            this.onConfigurationChanged();
+        };
+        document.getElementById("echoDelay").oninput = (e) => {
+            this.configuration.echoDelay = Number(e.target.value);
             this.onConfigurationChanged();
         };
 
