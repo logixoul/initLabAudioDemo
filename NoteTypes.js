@@ -9,7 +9,7 @@ export class Note {
     }
     nextSample() {
         this.sampleIndex++;
-        const envelopeValue = Math.pow(0.9999, this.sampleIndex);
+        const envelopeValue = Math.pow(0.99994, this.sampleIndex);
         if(envelopeValue < 0.0001)
             this._isFinished = true;
         return this.osc.nextSample()*envelopeValue;
