@@ -5,3 +5,6 @@ Better to use "Live Preview" VSCode ext. I somehow made it work (was getting err
     (I think what fixed it was clicking the Live Preview btn in the top right of VSCode (when index.html is selected))
 
 !!!console.log from Worklet inner loop freezes the whole computer!!!
+
+Remaining todo:
+- explain the exp lowpass filter
