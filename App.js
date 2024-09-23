@@ -55,7 +55,7 @@ export class App {
                 const powerBase = Math.pow(2, 1/12);
                 this.audioThreadManager.postMessage({
                     name: "playNote",
-                    frequency: 440 * Math.pow(powerBase, noteIndex)
+                    frequency: 220 * Math.pow(powerBase, noteIndex)
                 });
             }
         });
@@ -76,7 +76,20 @@ export class App {
                 name: "playSnare",
             });
             await sleep(250);
-            this.sendDrum(240);
+            this.sendDrum(480);
+            await sleep(250);
+            this.audioThreadManager.postMessage({
+                name: "playSnare",
+            });
+            await sleep(250);
+
+            this.audioThreadManager.postMessage({
+                name: "playSnare",
+            });
+            await sleep(250);
+            this.sendDrum(120);
+            await sleep(250);
+            this.sendDrum(480);
             await sleep(250);
             this.audioThreadManager.postMessage({
                 name: "playSnare",

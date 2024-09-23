@@ -19,20 +19,19 @@ export class Note {
     }
 }
 
+const drummingVolume = 0.2; 
+
 export class DrumHit extends Note {
-    frequencyStep;
     constructor(frequency, configuration) {
         const osc = new SquareOscillator(frequency, configuration)
         super(osc);
-        this.frequencyStep = frequency / 10000;
     }
 
     nextSample() {
-        //this.osc.frequency -= this.frequencyStep;
         this.osc.frequency *= 0.9998;
-        if(this.osc.frequency <= 10)
+        if(this.osc.frequency <= 7)
             this._isFinished = true;
-        return this.osc.nextSample();
+        return this.osc.nextSample() * drummingVolume;
     }
 }
 
@@ -47,6 +46,6 @@ export class SnareHit extends Note {
         if(this.sampleIndex > 4000)
             this._isFinished = true;
 
-        return Math.random()*2-1;
+        return (Math.random()*2-1) * drummingVolume;
     }
 }
