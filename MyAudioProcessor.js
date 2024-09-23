@@ -7,13 +7,15 @@ import * as FilterTypes from "./FilterTypes.js";
 class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
     notes = [];
-    filter = new FilterTypes.LowPassFilter();
+    filter;
     constructor() {
         super();
 
         this.port.onmessage = (e) => {
-            if(e.data.name == "setConfiguration")
+            if(e.data.name == "setConfiguration") {
                 this.configuration = e.data.value;
+                this.filter = new FilterTypes.LowPassFilter(this.configuration); // reset the filter with the new config
+            }
             console.log(e.data);
             //this.port.postMessage("pong");
             if(e.data.name == "playNote") {

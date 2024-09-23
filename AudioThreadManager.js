@@ -1,12 +1,15 @@
 export class AudioThreadManager {
     constructor() {
-        this.audioContext = new AudioContext();
+
     }
+    audioContext;
     sampleRate() {
         return this.audioContext.sampleRate;
     }
 
     async launchThread() {
+        this.audioContext = new AudioContext();
+        
         // Load the AudioWorkletProcessor from an external file
         await this.audioContext.audioWorklet.addModule('MyAudioProcessor.js');
   

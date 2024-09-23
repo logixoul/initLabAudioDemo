@@ -1,7 +1,7 @@
 import { AudioThreadManager } from "./AudioThreadManager.js";
 
 class Configuration {
-    sineShaping = 1;
+    filterCutoff = 1;
     oscillatorClass = "SineOscillator";
     sampleRate;
 }
@@ -17,10 +17,8 @@ export class App {
     configuration = new Configuration();
 
     constructor() {
-        this.configuration.sampleRate = this.audioThreadManager.sampleRate();
-
-        document.getElementById("shapingSlider").onchange = (e) => {
-            this.configuration.sineShaping = e.target.value
+        document.getElementById("filterCutoff").onchange = (e) => {
+            this.configuration.filterCutoff = e.target.value;
             this.onConfigurationChanged();
         };
 
@@ -33,6 +31,7 @@ export class App {
             if(e.key == " ") {
                 if(!this.audioThreadRunning) {
                     await this.audioThreadManager.launchThread();
+                    this.configuration.sampleRate = this.audioThreadManager.sampleRate();
                     this.onConfigurationChanged();
                 
                     this.audioThreadRunning = true;
