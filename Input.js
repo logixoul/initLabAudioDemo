@@ -22,7 +22,7 @@ export class Input {
             if(e.key == " ") {
                 await app.launchAudioThread();
             }
-
+            
             const noteIndex = this.keyCodeToNoteIndex(e.code)
             if(noteIndex != null) {
                 const powerBase = Math.pow(2, 1/12);

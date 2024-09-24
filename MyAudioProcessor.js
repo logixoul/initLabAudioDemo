@@ -1,6 +1,4 @@
-import { SineOscillator } from "./SineOscillator.js"
-import { SquareOscillator } from "./SquareOscillator.js";
-import { SawOscillator } from "./SawOscillator.js";
+import * as OscillatorTypes from "./OscillatorTypes.js";
 import * as NoteTypes from "./NoteTypes.js";
 import * as EffectTypes from "./EffectTypes.js";
 
@@ -22,7 +20,8 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             }
             console.log(e.data);
             if(e.data.name == "playNote") {
-                const osc = new (eval(this.configuration.oscillatorClassName))(e.data.frequency, this.configuration);
+                const oscillatorClass = eval("OscillatorTypes."+this.configuration.oscillatorClassName)
+                const osc = new oscillatorClass(e.data.frequency, this.configuration);
                 this.notes.push(new NoteTypes.Note(osc));
             }
             if(e.data.name == "playDrum") {

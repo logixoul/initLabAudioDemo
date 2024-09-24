@@ -1,4 +1,4 @@
-import { SquareOscillator } from "./SquareOscillator.js";
+import { SquareOscillator } from "./OscillatorTypes.js";
 
 export class Note {
     osc;
