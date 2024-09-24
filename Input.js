@@ -20,10 +20,10 @@ export class Input {
 
         document.addEventListener("keydown", async (e) => {
             if(e.key == " ") {
-                app.launchAudioThread();
+                await app.launchAudioThread();
             }
 
-            const noteIndex = this.characterToNoteIndex(e.key)
+            const noteIndex = this.keyCodeToNoteIndex(e.code)
             if(noteIndex != null) {
                 const powerBase = Math.pow(2, 1/12);
                 app.audioThreadManager.postMessage({
@@ -34,28 +34,28 @@ export class Input {
         });
     }
 
-    characterToNoteIndex(char) {
+    keyCodeToNoteIndex(keyCode) {
         const mapping = {
-            z: 0,
-            s: 1,
-            x: 2,
-            d: 3,
-            c: 4,
-            v: 5,
-            g: 6,
-            b: 7,
-            h: 8,
-            n: 9,
-            j: 10,
-            m: 11,
-            ",": 12,
-            l: 13,
-            ".": 14,
-            ";": 15,
-            "/": 16
+            KeyZ: 0,
+            KeyS: 1,
+            KeyX: 2,
+            KeyD: 3,
+            KeyC: 4,
+            KeyV: 5,
+            KeyG: 6,
+            KeyB: 7,
+            KeyH: 8,
+            KeyN: 9,
+            KeyJ: 10,
+            KeyM: 11,
+            Comma: 12,
+            KeyL: 13,
+            Period: 14,
+            Semicolon: 15,
+            Slash: 16
         };
-        if(char in mapping) {
-            return mapping[char];
+        if(keyCode in mapping) {
+            return mapping[keyCode];
         }
         return null;
     }

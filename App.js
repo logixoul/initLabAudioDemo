@@ -20,13 +20,6 @@ export class App {
     configuration = new Configuration();
     input = new Input(this);
 
-    constructor() {
-        
-        document.addEventListener("keydown", async (e) => {
-            
-        });
-    }
-
     async launchAudioThread() {
         if(!this.audioThreadRunning) {
             await this.audioThreadManager.launchThread();
@@ -75,6 +68,4 @@ export class App {
             value: this.configuration
         });
     }
-
-
 }
