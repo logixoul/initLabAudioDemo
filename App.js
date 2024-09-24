@@ -1,4 +1,5 @@
 import { AudioThreadManager } from "./AudioThreadManager.js";
+import { Input } from "./Input.js"
 
 class Configuration {
     filterCutoff = 1;
@@ -17,48 +18,26 @@ export class App {
     audioThreadRunning = false;
     audioThreadManager = new AudioThreadManager();
     configuration = new Configuration();
+    input = new Input(this);
 
     constructor() {
-        document.getElementById("filterCutoff").oninput = (e) => {
-            this.configuration.filterCutoff = Number(e.target.value);
-            this.onConfigurationChanged();
-        };
-        document.getElementById("echoDelay").oninput = (e) => {
-            this.configuration.echoDelay = Number(e.target.value);
-            this.onConfigurationChanged();
-        };
-
-        document.getElementById("oscillatorSelection").onchange = (e) => {
-            this.configuration.oscillatorClassName = e.target.value;
-            this.onConfigurationChanged();
-        };
-        document.getElementById("filterSelection").onchange = (e) => {
-            this.configuration.filterClassName = e.target.value;
-            this.onConfigurationChanged();
-        };
-
+        
         document.addEventListener("keydown", async (e) => {
-            if(e.key == " ") {
-                if(!this.audioThreadRunning) {
-                    await this.audioThreadManager.launchThread();
-                    this.configuration.sampleRate = this.audioThreadManager.sampleRate();
-                    this.onConfigurationChanged();
-                
-                    this.audioThreadRunning = true;
-
-                    this.runDrumLoop();
-                    document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
-                }
-            }
-            const noteIndex = this.characterToNoteIndex(e.key)
-            if(noteIndex != null) {
-                const powerBase = Math.pow(2, 1/12);
-                this.audioThreadManager.postMessage({
-                    name: "playNote",
-                    frequency: 220 * Math.pow(powerBase, noteIndex)
-                });
-            }
+            
         });
+    }
+
+    async launchAudioThread() {
+        if(!this.audioThreadRunning) {
+            await this.audioThreadManager.launchThread();
+            this.configuration.sampleRate = this.audioThreadManager.sampleRate();
+            this.onConfigurationChanged();
+        
+            this.audioThreadRunning = true;
+
+            this.runDrumLoop();
+            document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
+        }
     }
 
     sendDrum(frequency) {
@@ -97,29 +76,5 @@ export class App {
         });
     }
 
-    characterToNoteIndex(char) {
-        const mapping = {
-            z: 0,
-            s: 1,
-            x: 2,
-            d: 3,
-            c: 4,
-            v: 5,
-            g: 6,
-            b: 7,
-            h: 8,
-            n: 9,
-            j: 10,
-            m: 11,
-            ",": 12,
-            l: 13,
-            ".": 14,
-            ";": 15,
-            "/": 16
-        };
-        if(char in mapping) {
-            return mapping[char];
-        }
-        return null;
-    }
+
 }

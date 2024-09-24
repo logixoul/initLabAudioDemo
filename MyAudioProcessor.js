@@ -40,7 +40,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             sample += note.nextSample();
         sample = this.filter.processSample(sample);
         sample = this.echo.processSample(sample);
-        sample *= .4;
+        sample *= .3;
         return sample;
     }
 
