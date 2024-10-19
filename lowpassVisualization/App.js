@@ -42,7 +42,7 @@ export class App {
 
     nextFrame() {
         
-        this.samples[this.reachedIndex] = this.filter.processSample(this.mouseY);
+        this.samples[this.reachedIndex] = this.filter.processSample(this.mouseY - this.canvas.height/2);
         this.reachedIndex++;
         if(this.reachedIndex >= this.canvas.width)
             this.reachedIndex = 0;
@@ -50,7 +50,7 @@ export class App {
         this.canvasContext.beginPath();
         this.canvasContext.moveTo(0, this.samples[0]);
         for(let i = 1; i < this.canvas.width; i++) {
-            this.canvasContext.lineTo(i, this.samples[i]);
+            this.canvasContext.lineTo(i, this.samples[i]+ this.canvas.height/2);
         }
         //this.canvasContext.endPath();
         this.canvasContext.stroke();

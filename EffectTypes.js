@@ -1,8 +1,9 @@
 export class BoxLowPassFilter {
     buffer;
+
     constructor(configuration) {
         this.configuration = configuration;
-        this.buffer = new Array(configuration.filterCutoff)
+        this.buffer = new Array(140);//new Array(configuration.filterCutoff)
         this.buffer.fill(0);
     }
     processSample(sample) {
