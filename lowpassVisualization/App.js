@@ -18,6 +18,7 @@ export class App {
         document.getElementById("filterCutoff").oninput = (e) => {
             this.configuration.filterCutoff = Number(e.target.value);
         };
+        this.configuration.filterCutoff = Number(document.getElementById("filterCutoff").value);
         document.getElementById("filterSelection").onchange = (e) => {
             let filterClassName = e.target.value;
             const filterClass = eval("EffectTypes." + filterClassName)

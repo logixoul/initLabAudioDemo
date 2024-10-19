@@ -22,7 +22,8 @@ export class ExpLowPassFilter {
         this.configuration = configuration;
     }
     processSample(sample) {
-        const coef = this.configuration.filterCutoff;
+        let coef = this.configuration.filterCutoff;
+        coef = Math.pow(coef, 3.0)
         this.filterState = coef * sample + (1-coef) * this.filterState;
         return this.filterState;
     }
