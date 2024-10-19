@@ -9,7 +9,6 @@ export class App {
     
     constructor() {
         this.configuration = new Configuration();
-        this.filter;
         this.canvas;
         this.canvasContext;
         this.mouseY = 0;
@@ -18,13 +17,12 @@ export class App {
         this.filter = new EffectTypes.ExpLowPassFilter(this.configuration)
         document.getElementById("filterCutoff").oninput = (e) => {
             this.configuration.filterCutoff = Number(e.target.value);
-            this.onConfigurationChanged();
         };
         document.getElementById("filterSelection").onchange = (e) => {
-            this.configuration.filterClassName = e.target.value;
-            this.onConfigurationChanged();
-        };
-
+            let filterClassName = e.target.value;
+            const filterClass = eval("EffectTypes." + filterClassName)
+            this.filter = new filterClass(this.configuration); // reset the filter with the new config        };
+        }
         this.canvas = document.getElementById("canvas");
         this.canvasContext = this.canvas.getContext("2d");
 
@@ -42,7 +40,8 @@ export class App {
     }
 
     nextFrame() {
-        this.samples[this.reachedIndex] = this.mouseY;
+        
+        this.samples[this.reachedIndex] = this.filter.processSample(this.mouseY);
         this.reachedIndex++;
         if(this.reachedIndex >= this.canvas.width)
             this.reachedIndex = 0;
