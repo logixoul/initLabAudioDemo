@@ -3,8 +3,7 @@ Press "Go Live" in the bottom right.
 
 Better to use "Live Preview" VSCode ext. I somehow made it work (was getting error 401 for main.js) but look into that again...
     (I think what fixed it was clicking the Live Preview btn in the top right of VSCode (when index.html is selected))
+    Ctrl+Shift+P -> start server
 
 !!!console.log from Worklet inner loop freezes the whole computer!!!
 
-Remaining todo:
-- explain the exp lowpass filter

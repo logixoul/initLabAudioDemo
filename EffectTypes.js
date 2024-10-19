@@ -1,4 +1,4 @@
-export class LowPassFilter {
+export class BoxLowPassFilter {
     buffer;
     constructor(configuration) {
         this.configuration = configuration;
