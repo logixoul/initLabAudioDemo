@@ -16,7 +16,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 const filterClass = eval("EffectTypes." + this.configuration.filterClassName)
                 this.filter = new filterClass(this.configuration); // reset the filter with the new config
 
-                this.echo = new EffectTypes.Echo(this.configuration); // reset the echo with the new config
+                this.echo = new EffectTypes.Reverb(this.configuration); // reset the echo with the new config
             }
             console.log(e.data);
             if(e.data.name == "playNote") {

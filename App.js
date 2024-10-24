@@ -6,7 +6,7 @@ class Configuration {
     oscillatorClassName = "SineOscillator";
     filterClassName = "ExpLowPassFilter"
     sampleRate;
-    echoDelay = 0;
+    echoDelay = 0.5;
 }
 
 // https://stackoverflow.com/questions/951021
@@ -28,7 +28,7 @@ export class App {
         
             this.audioThreadRunning = true;
 
-            this.runDrumLoop();
+            //this.runDrumLoop();
             document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
         }
     }

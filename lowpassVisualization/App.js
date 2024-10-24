@@ -41,8 +41,8 @@ export class App {
     }
 
     nextFrame() {
-        
-        this.samples[this.reachedIndex] = this.filter.processSample(this.mouseY - this.canvas.height/2);
+        let currentSample = this.filter.processSample(this.mouseY - this.canvas.height/2);
+        this.samples[this.reachedIndex] = currentSample;
         this.reachedIndex++;
         if(this.reachedIndex >= this.canvas.width)
             this.reachedIndex = 0;
@@ -52,7 +52,12 @@ export class App {
         for(let i = 1; i < this.canvas.width; i++) {
             this.canvasContext.lineTo(i, this.samples[i]+ this.canvas.height/2);
         }
-        //this.canvasContext.endPath();
+        this.canvasContext.strokeStyle="blue";
+        this.canvasContext.stroke();
+        this.canvasContext.beginPath();
+        this.canvasContext.moveTo(0, currentSample+ this.canvas.height/2);
+        this.canvasContext.lineTo(this.canvas.width, currentSample+ this.canvas.height/2);
+        this.canvasContext.strokeStyle="black";
         this.canvasContext.stroke();
     }
 }

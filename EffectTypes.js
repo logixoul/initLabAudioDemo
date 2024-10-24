@@ -56,3 +56,29 @@ export class Echo {
         return this.buffer[0] * .5 + this.buffer[this.buffer.length-1];
     }
 }
+
+export class Reverb {
+    buffer; // circular buffer
+    currentPos = 0;
+    constructor(configuration) {
+        this.configuration = configuration;
+        this.buffer = new Array(Math.round(10000*configuration.echoDelay))
+        this.buffer.fill(0);
+    }
+    processSample(sample) {
+        let newestSample = sample;
+        let futurePos = this.currentPos-1;
+        if(futurePos < 0)
+            futurePos += this.buffer.length
+        if(futurePos >= this.buffer.length)
+            futurePos -= this.buffer.length;
+        
+        //this.buffer[this.currentPos] += newestSample
+        const alpha = .1;
+        this.buffer[futurePos] = this.buffer[futurePos] * (1-alpha) + newestSample * alpha;
+        let returnValue = /*newestSample + */this.buffer[this.currentPos] / alpha;
+        this.currentPos++;
+        this.currentPos %= this.buffer.length;
+        return returnValue;
+    }
+}
