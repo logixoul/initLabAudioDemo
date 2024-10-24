@@ -10,14 +10,15 @@ export class Note {
         this.releaseIndex = 0;
     }
     nextSample() {
+        const releaseTime = 1000;
         this.sampleIndex++;
         //const envelopeValue = Math.pow(0.99994, this.sampleIndex);
         let envelopeValue = 1;
         //if(envelopeValue < 0.0001)
         if(this.sampleIndex > 10000) {
-            envelopeValue = Math.max(1-0.001*this.releaseIndex, 0)
+            envelopeValue = Math.max(1-this.releaseIndex / releaseTime, 0)
             this.releaseIndex++;
-            if(this.releaseIndex > 1000)
+            if(this.releaseIndex > releaseTime)
                 this._isFinished = true;
         }
         return this.osc.nextSample()*envelopeValue;
