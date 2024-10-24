@@ -13,7 +13,7 @@ export class Note {
         const releaseTime = 1000;
         this.sampleIndex++;
         //const envelopeValue = Math.pow(0.99994, this.sampleIndex);
-        let envelopeValue = 1;
+        let envelopeValue = 1.0;
         //if(envelopeValue < 0.0001)
         if(this.sampleIndex > 10000) {
             envelopeValue = Math.max(1-this.releaseIndex / releaseTime, 0)
