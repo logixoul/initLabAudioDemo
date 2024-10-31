@@ -20,7 +20,7 @@ export class App {
         document.getElementById("filterSelection").onchange = (e) => {
             let filterClassName = e.target.value;
             const filterClass = EffectTypes[filterClassName];
-            this.filter = new filterClass(this.configuration); // reset the filter with the new config        };
+            this.filter = new filterClass(this.configuration); // reset the filter with the new config
         }
         this.canvas = document.getElementById("canvas");
         this.canvasContext = this.canvas.getContext("2d");
