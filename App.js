@@ -40,7 +40,9 @@ export class App {
         });
     }
 
+    // noinspection JSUnusedGlobalSymbols
     async runDrumLoop() {
+        // noinspection InfiniteLoopJS
         while(true) {
             this.sendDrum(120);
             await sleep(250);

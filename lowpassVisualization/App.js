@@ -9,8 +9,6 @@ export class App {
     
     constructor() {
         this.configuration = new Configuration();
-        this.canvas;
-        this.canvasContext;
         this.mouseY = 0;
         this.samples = new Array(20000); // circular buffer
         this.reachedIndex = 0;
@@ -28,9 +26,7 @@ export class App {
         this.canvasContext = this.canvas.getContext("2d");
 
         this.canvas.addEventListener("mousemove", (e) => {
-            var x = e.pageX - e.currentTarget.offsetLeft;
-            var y = e.pageY - e.currentTarget.offsetTop; 
-            this.mouseY = y;
+            this.mouseY = e.pageY - e.currentTarget.offsetTop;
         });
 
         this.canvas.width = document.body.clientWidth;

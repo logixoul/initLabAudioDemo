@@ -43,7 +43,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         return sample;
     }
 
-    process(inputs, outputs, parameters) {
+    process(inputs, outputs) {
         this.removeFinishedNotes();
 
         const outputChannels = outputs[0];
