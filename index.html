@@ -1,28 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-	<script type="module">
-		import { App } from "./App.js"
-		window.addEventListener("load", ()=> {
-			const app = new App();
-		});
-	</script>
+		<title>Audio Demo</title>
+		<script type="module">
+			import { App } from "./App.js"
+			window.addEventListener("load", ()=> {
+				new App();
+			});
+		</script>
 	</head>
 	<body>
 		<p id="instructions">Press space to start</p>
-		<p>Filter Cutoff:</p>
+		<p>
+			<label for="filterCutoff">Filter Cutoff:</label>
+		</p>
 		<input type="range" id="filterCutoff" min="0" max="1" step="any" value="1"/>
 		<br/>
+		<!--suppress HtmlFormInputWithoutLabel -->
 		<select id="oscillatorSelection">
 			<option value="SineOscillator">Sine</option>
 			<option value="SquareOscillator">Square</option>
 			<option value="SawOscillator">Saw</option>
 		</select>
+		<!--suppress HtmlFormInputWithoutLabel -->
 		<select id="filterSelection">
 			<option value="ExpLowPassFilter">Low-pass (muffle)</option>
 			<option value="HighPassFilter">High-pass</option>
 		</select>
-		<p>Echo delay:</p>
+		<p>
+			<label for="echoDelay">Echo delay:</label>
+		</p>
 		<input type="range" id="echoDelay" min="0" max="1" step="any" value="0.5"/>
 		<br/>
 		<a href="lowpassVisualization/">Filter visualization</a>

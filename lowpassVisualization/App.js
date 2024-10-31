@@ -9,8 +9,6 @@ export class App {
     
     constructor() {
         this.configuration = new Configuration();
-        this.canvas;
-        this.canvasContext;
         this.mouseY = 0;
         this.samples = new Array(20000); // circular buffer
         this.reachedIndex = 0;
@@ -21,16 +19,14 @@ export class App {
         this.configuration.filterCutoff = Number(document.getElementById("filterCutoff").value);
         document.getElementById("filterSelection").onchange = (e) => {
             let filterClassName = e.target.value;
-            const filterClass = eval("EffectTypes." + filterClassName)
-            this.filter = new filterClass(this.configuration); // reset the filter with the new config        };
+            const filterClass = EffectTypes[filterClassName];
+            this.filter = new filterClass(this.configuration); // reset the filter with the new config
         }
         this.canvas = document.getElementById("canvas");
         this.canvasContext = this.canvas.getContext("2d");
 
         this.canvas.addEventListener("mousemove", (e) => {
-            var x = e.pageX - e.currentTarget.offsetLeft;
-            var y = e.pageY - e.currentTarget.offsetTop; 
-            this.mouseY = y;
+            this.mouseY = e.pageY - e.currentTarget.offsetTop;
         });
 
         this.canvas.width = document.body.clientWidth;
