@@ -21,7 +21,7 @@ export class App {
         this.configuration.filterCutoff = Number(document.getElementById("filterCutoff").value);
         document.getElementById("filterSelection").onchange = (e) => {
             let filterClassName = e.target.value;
-            const filterClass = eval("EffectTypes." + filterClassName)
+            const filterClass = EffectTypes[filterClassName];
             this.filter = new filterClass(this.configuration); // reset the filter with the new config        };
         }
         this.canvas = document.getElementById("canvas");
