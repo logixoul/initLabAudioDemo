@@ -40,6 +40,6 @@ export class SawOscillator {
     nextSample() {
         //sample = Math.sign(sample) * Math.pow(Math.abs(sample), this.shaping)
         this.phase += this.frequency / this.configuration.sampleRate;
-        return this.phase % 1;
+        return (this.phase % 1 - 0.5) * 2.0;
     }
 }
