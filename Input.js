@@ -19,7 +19,7 @@ export class Input {
         };
 
         document.addEventListener("keydown", async (e) => {
-            if(e.key == " ") {
+            if(e.key === " ") {
                 await app.launchAudioThread();
             }
             

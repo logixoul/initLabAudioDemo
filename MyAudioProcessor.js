@@ -11,7 +11,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         super();
 
         this.port.onmessage = (e) => {
-            if(e.data.name == "setConfiguration") {
+            if(e.data.name === "setConfiguration") {
                 this.configuration = e.data.value;
                 const filterClass = EffectTypes[this.configuration.filterClassName];
                 this.filter = new filterClass(this.configuration); // reset the filter with the new config
@@ -19,15 +19,15 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.echo = new EffectTypes.Reverb(this.configuration); // reset the echo with the new config
             }
             console.log(e.data);
-            if(e.data.name == "playNote") {
+            if(e.data.name === "playNote") {
                 const oscillatorClass = OscillatorTypes[this.configuration.oscillatorClassName];
                 const osc = new oscillatorClass(e.data.frequency, this.configuration);
                 this.notes.push(new NoteTypes.Note(osc));
             }
-            if(e.data.name == "playDrum") {
+            if(e.data.name === "playDrum") {
                 this.notes.push(new NoteTypes.DrumHit(e.data.frequency, this.configuration));
             }
-            if(e.data.name == "playSnare") {
+            if(e.data.name === "playSnare") {
                 this.notes.push(new NoteTypes.SnareHit());
             }
         };
