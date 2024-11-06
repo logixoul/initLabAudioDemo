@@ -142,8 +142,8 @@ export function parseMessage(bytes) {
 
                 if (number > 119) {
                     // channel mode messages
-                    msg.isChannelMode = true;
-                    msg.name = CHANNEL_MODE_MESSAGE_TYPES[number];
+                    msg.type = number;
+                    msg.name = CHANNEL_MODE_MESSAGE_TYPES?.[number];
 
                     switch (number) {
                         case ALL_SOUND_OFF:
@@ -199,7 +199,6 @@ export function parseMessage(bytes) {
                 }
                 else {
                     // controller value change
-                    msg.isChannelMode = false;
                     msg.number = number;
                     msg.value = bytes[2];
                 }
