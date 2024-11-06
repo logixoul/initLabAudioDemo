@@ -92,7 +92,7 @@ export class Input {
             BracketRight: 31
         };
         if(keyCode in mapping) {
-            return mapping[keyCode];
+            return mapping[keyCode] + 60;
         }
         return null;
     }

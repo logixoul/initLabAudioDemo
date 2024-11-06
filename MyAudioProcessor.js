@@ -45,8 +45,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
     }
 
     noteIndexToFrequency(noteIndex) {
-        const powerBase = Math.pow(2, 1/12);
-        return 220 * Math.pow(powerBase, noteIndex)
+        return 440 * Math.pow(2, (noteIndex - 69) / 12);
     }
 
     nextSample() {
