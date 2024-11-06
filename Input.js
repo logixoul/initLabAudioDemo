@@ -52,7 +52,27 @@ export class Input {
             KeyL: 13,
             Period: 14,
             Semicolon: 15,
-            Slash: 16
+            Slash: 16,
+            KeyQ: 12,
+            Digit2: 13,
+            KeyW: 14,
+            Digit3: 15,
+            KeyE: 16,
+            KeyR: 17,
+            Digit5: 18,
+            KeyT: 19,
+            Digit6: 20,
+            KeyY: 21,
+            Digit7: 22,
+            KeyU: 23,
+            KeyI: 24,
+            Digit9: 25,
+            KeyO: 26,
+            Digit0: 27,
+            KeyP: 28,
+            BracketLeft: 29,
+            Equal: 30,
+            BracketRight: 31
         };
         if(keyCode in mapping) {
             return mapping[keyCode];

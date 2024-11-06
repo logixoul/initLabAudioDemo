@@ -73,7 +73,8 @@ export class Reverb {
         
         //this.buffer[this.currentPos] += newestSample
         const alpha = .05;
-        this.buffer[futurePos] = this.buffer[futurePos] * (1-alpha) + newestSample * alpha;
+        this.buffer[futurePos] += newestSample * alpha;
+        this.buffer[futurePos] *= (1-alpha);
         let returnValue = newestSample + .12*this.buffer[this.currentPos] / alpha;
         this.currentPos++;
         this.currentPos %= this.buffer.length;
