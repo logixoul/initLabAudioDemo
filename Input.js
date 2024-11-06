@@ -19,16 +19,33 @@ export class Input {
         };
 
         document.addEventListener("keydown", async (e) => {
+            if(e.repeat)
+                return;
             if(e.key === " ") {
                 await app.launchAudioThread();
             }
             
             const noteIndex = this.keyCodeToNoteIndex(e.code)
             if(noteIndex != null) {
-                const powerBase = Math.pow(2, 1/12);
                 app.audioThreadManager.postMessage({
-                    name: "playNote",
-                    frequency: 220 * Math.pow(powerBase, noteIndex)
+                    name: "notePressed",
+                    noteIndex: noteIndex,
+                    hardwareKeyCode: e.code
+                });
+            }
+        });
+
+        document.addEventListener("keyup", async (e) => {
+            if(e.key === " ") {
+                await app.launchAudioThread();
+            }
+            
+            const noteIndex = this.keyCodeToNoteIndex(e.code)
+            if(noteIndex != null) {
+                app.audioThreadManager.postMessage({
+                    name: "noteReleased",
+                    noteIndex: noteIndex,
+                    hardwareKeyCode: e.code
                 });
             }
         });

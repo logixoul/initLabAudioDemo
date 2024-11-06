@@ -4,11 +4,12 @@ import * as EffectTypes from "./EffectTypes.js";
 
 class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
-    notes = [];
+    noteInstances = [];
     filter;
     echo;
     constructor() {
         super();
+        this.noteInstanceThatIsCurrentlyPressed = { };
 
         this.port.onmessage = (e) => {
             if(e.data.name === "setConfiguration") {
@@ -19,24 +20,39 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.echo = new EffectTypes.Reverb(this.configuration); // reset the echo with the new config
             }
             console.log(e.data);
-            if(e.data.name === "playNote") {
+            if(e.data.name === "notePressed") {
                 const oscillatorClass = OscillatorTypes[this.configuration.oscillatorClassName];
-                const osc = new oscillatorClass(e.data.frequency, this.configuration);
-                this.notes.push(new NoteTypes.Note(osc));
+                const frequency = this.noteIndexToFrequency(e.data.noteIndex);
+                const osc = new oscillatorClass(frequency, this.configuration);
+                const newNote = new NoteTypes.Note(osc);
+                this.noteInstances.push(newNote);
+                this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode] = newNote;
+            }
+            if(e.data.name === "noteReleased") {
+                let toNotify = this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode];
+                if(toNotify) {
+                    toNotify.handleNoteRelease();
+                    this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode] = null;
+                }
             }
             if(e.data.name === "playDrum") {
-                this.notes.push(new NoteTypes.DrumHit(e.data.frequency, this.configuration));
+                this.noteInstances.push(new NoteTypes.DrumHit(e.data.frequency, this.configuration));
             }
             if(e.data.name === "playSnare") {
-                this.notes.push(new NoteTypes.SnareHit());
+                this.noteInstances.push(new NoteTypes.SnareHit());
             }
         };
     }
 
+    noteIndexToFrequency(noteIndex) {
+        const powerBase = Math.pow(2, 1/12);
+        return 220 * Math.pow(powerBase, noteIndex)
+    }
+
     nextSample() {
         let sample = 0;
-        for(const note of this.notes)
-            sample += note.nextSample();
+        for(const noteInstance of this.noteInstances)
+            sample += noteInstance.nextSample();
         sample = this.filter.processSample(sample);
         sample = this.echo.processSample(sample);
         sample *= .3;
@@ -59,7 +75,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         return true;
     }
     removeFinishedNotes() {
-        this.notes = this.notes.filter(note => !note.isFinished())
+        this.noteInstances = this.noteInstances.filter(note => !note.isFinished())
     }
 }
 

@@ -3,24 +3,22 @@ import { SquareOscillator } from "./OscillatorTypes.js";
 export class Note {
     osc;
     _isFinished = false;
+    _isReleased = false;
     
     constructor(oscillator) {
         this.osc = oscillator;
         this.sampleIndex = 0;
         this.releaseIndex = 0;
     }
+    handleNoteRelease() {
+        this._isReleased = true;
+    }
     nextSample() {
-        const releaseTime = 1000;
-        this.sampleIndex++;
-        //const envelopeValue = Math.pow(0.99994, this.sampleIndex);
-        let envelopeValue = 1.0;
-        //if(envelopeValue < 0.0001)
-        if(this.sampleIndex > 10000) {
-            envelopeValue = Math.max(1-this.releaseIndex / releaseTime, 0)
+        if(this._isReleased)
             this.releaseIndex++;
-            if(this.releaseIndex > releaseTime)
-                this._isFinished = true;
-        }
+        const envelopeValue = Math.pow(0.99994, this.releaseIndex);
+        if(envelopeValue < 0.0001)
+            this._isFinished = true;
         return this.osc.nextSample()*envelopeValue;
     }
     isFinished() {
