@@ -1,4 +1,4 @@
-import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF, DRUM_CHANNEL_NUMBER } from './Midi.js';
+import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF, DRUM_CHANNEL_NUMBER, CONTROL_CHANGE } from './Midi.js';
 
 export class Input {
     app;
@@ -107,6 +107,16 @@ export class Input {
                     noteIndex: msg.key,
                     hardwareKeyCode: msg.key - 60,
                 });
+            }
+        }
+
+        if (msg.type === CONTROL_CHANGE) {
+            switch (msg.number) {
+                case 1:
+                    // modulation
+                    this.app.configuration.filterCutoff = msg.value / 127;
+                    this.app.onConfigurationChanged();
+                    break;
             }
         }
     }
