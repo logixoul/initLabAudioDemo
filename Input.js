@@ -76,10 +76,17 @@ export class Input {
 
         if (msg.type === NOTE_ON && msg.velocity > 0) {
             if (msg.channel === DRUM_CHANNEL_NUMBER) {
-                this.app.audioThreadManager.postMessage({
-                    name: "playDrum",
-                    frequency: this.noteIndexToFrequency(msg.key),
-                });
+                if (msg.key === 59) {
+                    this.app.audioThreadManager.postMessage({
+                        name: "playSnare"
+                    });
+                }
+                else {
+                    this.app.audioThreadManager.postMessage({
+                        name: "playDrum",
+                        frequency: this.noteIndexToFrequency(msg.key),
+                    });
+                }
             }
             else {
                 this.app.audioThreadManager.postMessage({
