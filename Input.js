@@ -1,5 +1,11 @@
+import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF } from './Midi.js';
+
 export class Input {
+    app;
+
     constructor(app) {
+        this.app = app;
+
         document.getElementById("filterCutoff").oninput = (e) => {
             app.configuration.filterCutoff = Number(e.target.value);
             app.onConfigurationChanged();
@@ -38,6 +44,14 @@ export class Input {
         document.addEventListener("keyup", async (e) => {
             if(e.key === " ") {
                 await app.launchAudioThread();
+
+                const midiAccess = await navigator.requestMIDIAccess();
+
+                midiAccess.inputs.forEach(input => {
+                    input.addEventListener('midimessage', e => {
+                        this.handleMidiMessage(parseMessage(e.data));
+                    });
+                });
             }
             
             const noteIndex = this.keyCodeToNoteIndex(e.code)
@@ -49,6 +63,28 @@ export class Input {
                 });
             }
         });
+    }
+
+    handleMidiMessage(msg) {
+        if (msg.type !== TIMING_CLOCK) {
+            console.log('MIDI', msg.name, msg);
+        }
+
+        if (msg.type === NOTE_ON && msg.velocity > 0) {
+            this.app.audioThreadManager.postMessage({
+                name: "notePressed",
+                noteIndex: msg.key,
+                hardwareKeyCode: msg.key - 60,
+            });
+        }
+
+        if (msg.type === NOTE_OFF || (msg.type === NOTE_ON && msg.velocity === 0)) {
+            this.app.audioThreadManager.postMessage({
+                name: "noteReleased",
+                noteIndex: msg.key,
+                hardwareKeyCode: msg.key - 60,
+            });
+        }
     }
 
     keyCodeToNoteIndex(keyCode) {
