@@ -1,4 +1,4 @@
-import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF } from './Midi.js';
+import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF, DRUM_CHANNEL_NUMBER } from './Midi.js';
 
 export class Input {
     app;
@@ -65,25 +65,42 @@ export class Input {
         });
     }
 
+    noteIndexToFrequency(noteIndex) {
+        return 440 * Math.pow(2, (noteIndex - 69) / 12);
+    }
+
     handleMidiMessage(msg) {
         if (msg.type !== TIMING_CLOCK) {
             console.log('MIDI', msg.name, msg);
         }
 
         if (msg.type === NOTE_ON && msg.velocity > 0) {
-            this.app.audioThreadManager.postMessage({
-                name: "notePressed",
-                noteIndex: msg.key,
-                hardwareKeyCode: msg.key - 60,
-            });
+            if (msg.channel === DRUM_CHANNEL_NUMBER) {
+                this.app.audioThreadManager.postMessage({
+                    name: "playDrum",
+                    frequency: this.noteIndexToFrequency(msg.key),
+                });
+            }
+            else {
+                this.app.audioThreadManager.postMessage({
+                    name: "notePressed",
+                    noteIndex: msg.key,
+                    hardwareKeyCode: msg.key - 60,
+                });
+            }
         }
 
         if (msg.type === NOTE_OFF || (msg.type === NOTE_ON && msg.velocity === 0)) {
-            this.app.audioThreadManager.postMessage({
-                name: "noteReleased",
-                noteIndex: msg.key,
-                hardwareKeyCode: msg.key - 60,
-            });
+            if (msg.channel === DRUM_CHANNEL_NUMBER) {
+                // drums don't finish when key is released
+            }
+            else {
+                this.app.audioThreadManager.postMessage({
+                    name: "noteReleased",
+                    noteIndex: msg.key,
+                    hardwareKeyCode: msg.key - 60,
+                });
+            }
         }
     }
 

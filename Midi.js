@@ -80,6 +80,8 @@ export const SYSTEM_MESSAGE_TYPES = {
     [RESET]: 'reset',
 };
 
+export const DRUM_CHANNEL_NUMBER = 10;
+
 export function parseMessage(bytes) {
     const msg = {};
     const status = bytes[0];
