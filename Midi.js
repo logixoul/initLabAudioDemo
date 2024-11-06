@@ -123,7 +123,7 @@ export function parseMessage(bytes) {
         const type = status >> 4;
         msg.type = type;
         msg.name = CHANNEL_VOICE_MESSAGE_TYPES?.[type];
-        msg.channel = status & 0x0F;
+        msg.channel = (status & 0x0F) + 1;
 
         switch (type) {
             case NOTE_OFF:
