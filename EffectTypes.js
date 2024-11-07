@@ -57,12 +57,12 @@ export class Echo {
     }
 }
 
-export class Reverb {
+export class DelayLine {
     buffer; // circular buffer
     currentPos = 0;
-    constructor(configuration) {
+    constructor(configuration, timeMultiplier) {
         this.configuration = configuration;
-        this.buffer = new Array(Math.round(10000*configuration.echoDelay))
+        this.buffer = new Array(Math.round(10000*configuration.echoDelay * timeMultiplier))
         this.buffer.fill(0);
     }
     processSample(sample) {
@@ -71,13 +71,30 @@ export class Reverb {
         if(futurePos >= this.buffer.length)
             futurePos -= this.buffer.length + 1;
         
-        //this.buffer[this.currentPos] += newestSample
-        const alpha = .05;
-        this.buffer[futurePos] += newestSample * alpha;
-        this.buffer[futurePos] *= (1-alpha);
-        let returnValue = newestSample + .12*this.buffer[this.currentPos] / alpha;
+        this.buffer[futurePos] += newestSample;
+        this.buffer[futurePos] *= .95;
+        const dryLevel = 1.0;
+        const wetLevel = 0.6;
+        let returnValue = dryLevel*newestSample + wetLevel*this.buffer[this.currentPos];
         this.currentPos++;
         this.currentPos %= this.buffer.length;
         return returnValue;
+    }
+}
+
+export class Reverb {
+    delayLines = [];
+    constructor(configuration) {
+        this.configuration = configuration;
+        this.delayLines.push(new DelayLine(configuration, 1));
+        //for(let i = .9; i <= 1.1; i+=.02)
+            //this.delayLines.push(new DelayLine(configuration, i));
+    }
+
+    processSample(sample) {
+        for(let delayLine of this.delayLines) {
+            sample = delayLine.processSample(sample);
+        }
+        return sample;
     }
 }

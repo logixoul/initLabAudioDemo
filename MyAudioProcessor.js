@@ -6,7 +6,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
     noteInstances = [];
     filter;
-    echo;
+    reverb;
     constructor() {
         super();
         this.noteInstanceThatIsCurrentlyPressed = { };
@@ -17,7 +17,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 const filterClass = EffectTypes[this.configuration.filterClassName];
                 this.filter = new filterClass(this.configuration); // reset the filter with the new config
 
-                this.echo = new EffectTypes.Reverb(this.configuration); // reset the echo with the new config
+                this.reverb = new EffectTypes.Reverb(this.configuration); // reset the reverb with the new config
             }
             console.log(e.data);
             if(e.data.name === "notePressed") {
@@ -54,7 +54,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
         for(const noteInstance of this.noteInstances)
             sample += noteInstance.nextSample();
         sample = this.filter.processSample(sample);
-        sample = this.echo.processSample(sample);
+        sample = this.reverb.processSample(sample);
         sample *= .3;
         return sample;
     }
