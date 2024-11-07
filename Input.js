@@ -1,4 +1,4 @@
-import { parseMessage, TIMING_CLOCK, NOTE_ON, NOTE_OFF, DRUM_CHANNEL_NUMBER, CONTROL_CHANGE } from './Midi.js';
+import * as Midi from './Midi.js';
 
 export class Input {
     app;
@@ -49,7 +49,7 @@ export class Input {
 
                 midiAccess.inputs.forEach(input => {
                     input.addEventListener('midimessage', e => {
-                        this.handleMidiMessage(parseMessage(e.data));
+                        this.handleMidiMessage(Midi.parseMessage(e.data));
                     });
                 });
             }
@@ -70,12 +70,12 @@ export class Input {
     }
 
     handleMidiMessage(msg) {
-        if (msg.type !== TIMING_CLOCK) {
+        if (msg.type !== Midi.TIMING_CLOCK) {
             console.log('MIDI', msg.name, msg);
         }
 
-        if (msg.type === NOTE_ON && msg.velocity > 0) {
-            if (msg.channel === DRUM_CHANNEL_NUMBER) {
+        if (msg.type === Midi.NOTE_ON && msg.velocity > 0) {
+            if (msg.channel === Midi.DRUM_CHANNEL_NUMBER) {
                 if (msg.key === 59) {
                     this.app.audioThreadManager.postMessage({
                         name: "playSnare"
@@ -97,8 +97,8 @@ export class Input {
             }
         }
 
-        if (msg.type === NOTE_OFF || (msg.type === NOTE_ON && msg.velocity === 0)) {
-            if (msg.channel === DRUM_CHANNEL_NUMBER) {
+        if (msg.type === Midi.NOTE_OFF || (msg.type === Midi.NOTE_ON && msg.velocity === 0)) {
+            if (msg.channel === Midi.DRUM_CHANNEL_NUMBER) {
                 // drums don't finish when key is released
             }
             else {
@@ -110,7 +110,7 @@ export class Input {
             }
         }
 
-        if (msg.type === CONTROL_CHANGE) {
+        if (msg.type === Midi.CONTROL_CHANGE) {
             switch (msg.number) {
                 case 1:
                     // modulation
