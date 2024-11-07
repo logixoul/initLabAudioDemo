@@ -1,6 +1,7 @@
 import * as OscillatorTypes from "./OscillatorTypes.js";
 import * as NoteTypes from "./NoteTypes.js";
 import * as EffectTypes from "./EffectTypes.js";
+import * as MusicTheory from './MusicTheory.js'
 
 class MyAudioProcessor extends AudioWorkletProcessor {
     configuration = null;
@@ -22,7 +23,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             console.log(e.data);
             if(e.data.name === "notePressed") {
                 const oscillatorClass = OscillatorTypes[this.configuration.oscillatorClassName];
-                const frequency = this.noteIndexToFrequency(e.data.noteIndex);
+                const frequency = MusicTheory.noteIndexToFrequency(e.data.noteIndex);
                 const osc = new oscillatorClass(frequency, this.configuration);
                 const newNote = new NoteTypes.Note(osc);
                 this.noteInstances.push(newNote);
@@ -42,11 +43,6 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.noteInstances.push(new NoteTypes.SnareHit());
             }
         };
-    }
-
-    noteIndexToFrequency(noteIndex) {
-        const powerBase = Math.pow(2, 1/12);
-        return 220 * Math.pow(powerBase, noteIndex)
     }
 
     nextSample() {

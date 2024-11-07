@@ -1,5 +1,12 @@
+import * as Midi from './Midi.js';
+import * as MusicTheory from './MusicTheory.js'
+
 export class Input {
+    app;
+
     constructor(app) {
+        this.app = app;
+
         document.getElementById("filterCutoff").oninput = (e) => {
             app.configuration.filterCutoff = Number(e.target.value);
             app.onConfigurationChanged();
@@ -38,6 +45,14 @@ export class Input {
         document.addEventListener("keyup", async (e) => {
             if(e.key === " ") {
                 await app.launchAudioThread();
+
+                const midiAccess = await navigator.requestMIDIAccess();
+
+                midiAccess.inputs.forEach(input => {
+                    input.addEventListener('midimessage', e => {
+                        this.handleMidiMessage(Midi.parseMessage(e.data));
+                    });
+                });
             }
             
             const noteIndex = this.keyCodeToNoteIndex(e.code)
@@ -49,6 +64,58 @@ export class Input {
                 });
             }
         });
+    }
+
+    handleMidiMessage(msg) {
+        if (msg.type !== Midi.TIMING_CLOCK) {
+            console.log('MIDI', msg.name, msg);
+        }
+
+        if (msg.type === Midi.NOTE_ON && msg.velocity > 0) {
+            if (msg.channel === Midi.DRUM_CHANNEL_NUMBER) {
+                if (msg.key === 59) {
+                    this.app.audioThreadManager.postMessage({
+                        name: "playSnare"
+                    });
+                }
+                else {
+                    this.app.audioThreadManager.postMessage({
+                        name: "playDrum",
+                        frequency: MusicTheory.noteIndexToFrequency(msg.key),
+                    });
+                }
+            }
+            else {
+                this.app.audioThreadManager.postMessage({
+                    name: "notePressed",
+                    noteIndex: msg.key,
+                    hardwareKeyCode: msg.key - 60,
+                });
+            }
+        }
+
+        if (msg.type === Midi.NOTE_OFF || (msg.type === Midi.NOTE_ON && msg.velocity === 0)) {
+            if (msg.channel === Midi.DRUM_CHANNEL_NUMBER) {
+                // drums don't finish when key is released
+            }
+            else {
+                this.app.audioThreadManager.postMessage({
+                    name: "noteReleased",
+                    noteIndex: msg.key,
+                    hardwareKeyCode: msg.key - 60,
+                });
+            }
+        }
+
+        if (msg.type === Midi.CONTROL_CHANGE) {
+            switch (msg.number) {
+                case 1:
+                    // modulation
+                    this.app.configuration.filterCutoff = msg.value / 127;
+                    this.app.onConfigurationChanged();
+                    break;
+            }
+        }
     }
 
     keyCodeToNoteIndex(keyCode) {
@@ -92,7 +159,7 @@ export class Input {
             BracketRight: 31
         };
         if(keyCode in mapping) {
-            return mapping[keyCode];
+            return mapping[keyCode] + 60;
         }
         return null;
     }
