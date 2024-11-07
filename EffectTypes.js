@@ -72,8 +72,6 @@ export class DelayLine {
             futurePos -= this.buffer.length + 1;
         
         const alpha = 0.05;
-        //this.buffer[futurePos] += newestSample;
-        ////this.buffer[futurePos] *= .95;
         this.buffer[futurePos] = (1-alpha) * this.buffer[futurePos] + alpha * newestSample;
         const dryLevel = 0.9;
         const wetLevel = 0.9;
