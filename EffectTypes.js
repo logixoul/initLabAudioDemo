@@ -62,7 +62,7 @@ export class DelayLine {
     currentPos = 0;
     constructor(configuration, timeMultiplier) {
         this.configuration = configuration;
-        this.buffer = new Array(Math.round(10000*configuration.echoDelay * timeMultiplier))
+        this.buffer = new Array(Math.round(5000*configuration.echoDelay * timeMultiplier))
         this.buffer.fill(0);
     }
     processSample(sample) {
@@ -74,7 +74,7 @@ export class DelayLine {
         const alpha = 0.05;
         this.buffer[futurePos] = (1-alpha) * this.buffer[futurePos] + alpha * newestSample;
         const dryLevel = 0.9;
-        const wetLevel = 0.9;
+        const wetLevel = 10.9;
         let returnValue = dryLevel*newestSample + wetLevel*this.buffer[this.currentPos];
         this.currentPos++;
         this.currentPos %= this.buffer.length;
