@@ -71,10 +71,12 @@ export class DelayLine {
         if(futurePos >= this.buffer.length)
             futurePos -= this.buffer.length + 1;
         
-        this.buffer[futurePos] += newestSample;
-        this.buffer[futurePos] *= .95;
-        const dryLevel = 1.0;
-        const wetLevel = 0.6;
+        const alpha = 0.05;
+        //this.buffer[futurePos] += newestSample;
+        ////this.buffer[futurePos] *= .95;
+        this.buffer[futurePos] = (1-alpha) * this.buffer[futurePos] + alpha * newestSample;
+        const dryLevel = 0.9;
+        const wetLevel = 0.9;
         let returnValue = dryLevel*newestSample + wetLevel*this.buffer[this.currentPos];
         this.currentPos++;
         this.currentPos %= this.buffer.length;
@@ -86,15 +88,16 @@ export class Reverb {
     delayLines = [];
     constructor(configuration) {
         this.configuration = configuration;
-        this.delayLines.push(new DelayLine(configuration, 1));
-        //for(let i = .9; i <= 1.1; i+=.02)
-            //this.delayLines.push(new DelayLine(configuration, i));
+        //this.delayLines.push(new DelayLine(configuration, 1));
+        for(let i = .9; i <= 1.1; i+=.02)
+            this.delayLines.push(new DelayLine(configuration, i));
     }
 
     processSample(sample) {
+        let sum = 0;
         for(let delayLine of this.delayLines) {
-            sample = delayLine.processSample(sample);
+            sum+= delayLine.processSample(sample);
         }
-        return sample;
+        return sum/this.delayLines.length;
     }
 }
