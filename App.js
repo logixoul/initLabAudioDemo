@@ -28,7 +28,7 @@ export class App {
         
             this.audioThreadRunning = true;
 
-            //this.runDrumLoop();
+            this.runDrumLoop();
             document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
         }
     }

@@ -1,4 +1,5 @@
 import * as Midi from './Midi.js';
+import * as MusicTheory from './MusicTheory.js'
 
 export class Input {
     app;
@@ -65,10 +66,6 @@ export class Input {
         });
     }
 
-    noteIndexToFrequency(noteIndex) {
-        return 440 * Math.pow(2, (noteIndex - 69) / 12);
-    }
-
     handleMidiMessage(msg) {
         if (msg.type !== Midi.TIMING_CLOCK) {
             console.log('MIDI', msg.name, msg);
@@ -84,7 +81,7 @@ export class Input {
                 else {
                     this.app.audioThreadManager.postMessage({
                         name: "playDrum",
-                        frequency: this.noteIndexToFrequency(msg.key),
+                        frequency: MusicTheory.noteIndexToFrequency(msg.key),
                     });
                 }
             }
