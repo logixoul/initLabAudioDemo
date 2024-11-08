@@ -71,10 +71,10 @@ export class DelayLine {
         if(futurePos >= this.buffer.length)
             futurePos -= this.buffer.length + 1;
         
-        const alpha = 0.05;
-        this.buffer[futurePos] = (1-alpha) * this.buffer[futurePos] + alpha * newestSample;
+        this.buffer[futurePos] *= 0.95;
+        this.buffer[futurePos] += newestSample;
         const dryLevel = 0.9;
-        const wetLevel = 10.9;
+        const wetLevel = 0.5;
         let returnValue = dryLevel*newestSample + wetLevel*this.buffer[this.currentPos];
         this.currentPos++;
         this.currentPos %= this.buffer.length;
