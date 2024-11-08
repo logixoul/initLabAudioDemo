@@ -30,6 +30,8 @@ export class Input {
                 return;
             if(e.key === " ") {
                 await app.launchAudioThread();
+                app.configuration.drumLoopEnabled = !app.configuration.drumLoopEnabled;
+                app.onConfigurationChanged();
             }
             
             const noteIndex = this.keyCodeToNoteIndex(e.code)
@@ -64,6 +66,23 @@ export class Input {
                 });
             }
         });
+
+        this.addSlider("test", ".2");
+    }
+    // https://stackoverflow.com/a/35385518/122687
+    htmlToNodes(html) {
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        return template.content;
+    }
+    addSlider(id, defaultValue) {
+        const slider = this.htmlToNodes(`
+            <p>
+            <label for="${id}">${id}:</label>
+		    <input type="range" id="${id}" min="0" max="1" step="any" value="${defaultValue}"/>
+            </p>
+            `)
+        document.getElementsByTagName("body")[0].appendChild(slider);
     }
 
     handleMidiMessage(msg) {

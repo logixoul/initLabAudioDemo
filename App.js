@@ -7,6 +7,7 @@ class Configuration {
     filterClassName = "ExpLowPassFilter"
     sampleRate;
     echoDelay = 0.5;
+    drumLoopEnabled = false;
 }
 
 // https://stackoverflow.com/questions/951021
@@ -29,7 +30,7 @@ export class App {
             this.audioThreadRunning = true;
 
             this.runDrumLoop();
-            document.getElementById("instructions").innerText = "Play with the z/s/x etc keys";
+            document.getElementById("instructions").innerText = "Play with the z/s/x etc keys. Press space to toggle DRUMLOOP.";
         }
     }
 

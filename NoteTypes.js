@@ -1,4 +1,4 @@
-import { SquareOscillator } from "./OscillatorTypes.js";
+import { SquareOscillator, NoiseOscillator } from "./OscillatorTypes.js";
 
 export class Note {
     osc;
@@ -35,6 +35,8 @@ export class DrumHit extends Note {
     }
 
     nextSample() {
+        if(!this.osc.configuration.drumLoopEnabled)
+            return 0.0;
         this.osc.frequency *= 0.9998;
         if(this.osc.frequency <= 7)
             this._isFinished = true;
@@ -43,16 +45,20 @@ export class DrumHit extends Note {
 }
 
 export class SnareHit extends Note {
-    constructor() {
-        super(null);
+    constructor(configuration) {
+        const osc = new NoiseOscillator(configuration)
+        super(osc);
         this.sampleIndex = 0;
     }
 
     nextSample() {
+        if(!this.osc.configuration.drumLoopEnabled)
+            return 0.0;
+
         this.sampleIndex++;
         if(this.sampleIndex > 4000)
             this._isFinished = true;
 
-        return (Math.random()*2-1) * drummingVolume;
+        return this.osc.nextSample() * drummingVolume;
     }
 }

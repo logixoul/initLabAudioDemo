@@ -40,7 +40,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 this.noteInstances.push(new NoteTypes.DrumHit(e.data.frequency, this.configuration));
             }
             if(e.data.name === "playSnare") {
-                this.noteInstances.push(new NoteTypes.SnareHit());
+                this.noteInstances.push(new NoteTypes.SnareHit(this.configuration));
             }
         };
     }
