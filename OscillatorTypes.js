@@ -43,3 +43,14 @@ export class SawOscillator {
         return (this.phase % 1 - 0.5) * 2.0;
     }
 }
+
+export class NoiseOscillator {
+    configuration;
+    constructor(configuration) {
+        this.configuration = configuration;
+    }
+
+    nextSample() {
+        return (Math.random() - 0.5) * 2.0;
+    }
+}
