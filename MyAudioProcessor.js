@@ -25,7 +25,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
                 const oscillatorClass = OscillatorTypes[this.configuration.oscillatorClassName];
                 const frequency = MusicTheory.noteIndexToFrequency(e.data.noteIndex);
                 const osc = new oscillatorClass(frequency, this.configuration);
-                const newNote = new NoteTypes.Note(osc);
+                const newNote = new NoteTypes.Note(osc, e.data.volume);
                 this.noteInstances.push(newNote);
                 this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode] = newNote;
             }
