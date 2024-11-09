@@ -3,6 +3,12 @@ import * as MusicTheory from './MusicTheory.js'
 
 export class Input {
     app;
+    // this map is needed because sometimes (for some reason)
+    // we get a second keyDown event BEFORE we get a keyUp event.
+    // To repro: hold 'z', hold 'x', release 'z', release 'x'. In this order.
+    // Same happens with MIDI sometimes.
+    keysHeld = {};
+    
 
     constructor(app) {
         this.app = app;
@@ -26,8 +32,9 @@ export class Input {
         };
 
         document.addEventListener("keydown", async (e) => {
-            if(e.repeat)
+            if(this.keysHeld[e.key])
                 return;
+            this.keysHeld[e.key] = true;
             if(e.key === " ") {
                 await app.launchAudioThread();
                 app.configuration.drumLoopEnabled = !app.configuration.drumLoopEnabled;
@@ -45,6 +52,7 @@ export class Input {
         });
 
         document.addEventListener("keyup", async (e) => {
+            this.keysHeld[e.key] = false;
             if(e.key === " ") {
                 const midiAccess = await navigator.requestMIDIAccess();
 
@@ -103,6 +111,10 @@ export class Input {
                 }
             }
             else {
+                if(this.keysHeld[msg.key - 60])
+                    return;
+                this.keysHeld[msg.key - 60] = true;
+    
                 this.app.audioThreadManager.postMessage({
                     name: "notePressed",
                     noteIndex: msg.key,
@@ -117,6 +129,9 @@ export class Input {
                 // drums don't finish when key is released
             }
             else {
+                if(!this.keysHeld[msg.key - 60])
+                    return;
+                this.keysHeld[msg.key - 60] = false;
                 this.app.audioThreadManager.postMessage({
                     name: "noteReleased",
                     noteIndex: msg.key,

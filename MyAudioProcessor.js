@@ -20,7 +20,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
 
                 this.reverb = new EffectTypes.Reverb(this.configuration); // reset the reverb with the new config
             }
-            console.log(e.data);
+            //console.log(e.data);
             if(e.data.name === "notePressed") {
                 const oscillatorClass = OscillatorTypes[this.configuration.oscillatorClassName];
                 const frequency = MusicTheory.noteIndexToFrequency(e.data.noteIndex);
@@ -31,9 +31,13 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             }
             if(e.data.name === "noteReleased") {
                 let toNotify = this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode];
+                //if(typeof(toNotify) === "undefined")
+                //    console.log("ERROR");
                 if(toNotify) {
                     toNotify.handleNoteRelease();
                     this.noteInstanceThatIsCurrentlyPressed[e.data.hardwareKeyCode] = null;
+                } else {
+                    console.log("BTW, THIS SHOULD NEVER HAPPEN")
                 }
             }
             if(e.data.name === "playDrum") {

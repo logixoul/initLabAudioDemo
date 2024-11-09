@@ -11,3 +11,5 @@ TODO:
 - dont send drum messages when muted
 - https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query
 - when we send too many messages (over `port`) in a short time, they get very throttled
+- Ask Venci: why subtract 60 here: hardwareKeyCode: msg.key - 60
+    ... and centralize it
