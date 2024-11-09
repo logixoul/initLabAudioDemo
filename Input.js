@@ -36,9 +36,16 @@ export class Input {
                 return;
             this.keysHeld[e.key] = true;
             if(e.key === " ") {
-                await app.launchAudioThread();
-                app.configuration.drumLoopEnabled = !app.configuration.drumLoopEnabled;
-                app.onConfigurationChanged();
+                // we use the space key both for toggling drumloop and for
+                // initting the audio system.
+                if(app.audioThreadRunning)
+                {
+                    app.configuration.drumLoopEnabled = !app.configuration.drumLoopEnabled;
+                    app.onConfigurationChanged();
+                }
+                else {
+                    await app.launchAudioThread();
+                }
             }
             
             const noteIndex = this.keyCodeToNoteIndex(e.code)
