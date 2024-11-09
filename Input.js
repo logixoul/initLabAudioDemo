@@ -46,8 +46,6 @@ export class Input {
 
         document.addEventListener("keyup", async (e) => {
             if(e.key === " ") {
-                await app.launchAudioThread();
-
                 const midiAccess = await navigator.requestMIDIAccess();
 
                 midiAccess.inputs.forEach(input => {

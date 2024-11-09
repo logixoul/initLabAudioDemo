@@ -7,3 +7,7 @@ Better to use "Live Preview" VSCode ext. I somehow made it work (was getting err
 
 !!!console.log from Worklet inner loop freezes the whole computer!!!
 
+TODO:
+- dont send drum messages when muted
+- https://developer.mozilla.org/en-US/docs/Web/API/Permissions/query
+- when we send too many messages (over `port`) in a short time, they get very throttled
