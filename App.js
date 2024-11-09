@@ -21,6 +21,20 @@ export class App {
     configuration = new Configuration();
     input = new Input(this);
 
+    async tryAutoEnableAudio() {
+        // no idea why I need to query for microphone input rather
+        // than for audio outpuit, but hey, it works.
+        navigator.permissions.query({ name: "microphone" }).then(async (result) => {
+            if (result.state === "granted") {
+                console.log("Cool! The user has manually enabled microphone access, so we can launch the audio thread without waiting for user interaction.")
+                await this.launchAudioThread();
+            } else if (result.state === "prompt") {
+            } else {
+                // Don't do anything if the permission was denied.
+            }
+        });
+    }
+
     async launchAudioThread() {
         if(!this.audioThreadRunning) {
             await this.audioThreadManager.launchThread();
