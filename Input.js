@@ -107,6 +107,7 @@ export class Input {
                     name: "notePressed",
                     noteIndex: msg.key,
                     hardwareKeyCode: msg.key - 60,
+                    volume: msg.velocity / 127,
                 });
             }
         }

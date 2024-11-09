@@ -4,11 +4,13 @@ export class Note {
     osc;
     _isFinished = false;
     _isReleased = false;
+    volume;
     
-    constructor(oscillator) {
+    constructor(oscillator, volume = 1) {
         this.osc = oscillator;
         this.sampleIndex = 0;
         this.releaseIndex = 0;
+        this.volume = volume;
     }
     handleNoteRelease() {
         this._isReleased = true;
@@ -19,7 +21,7 @@ export class Note {
         const envelopeValue = Math.pow(0.99994, this.releaseIndex);
         if(envelopeValue < 0.0001)
             this._isFinished = true;
-        return this.osc.nextSample()*envelopeValue;
+        return this.osc.nextSample()*envelopeValue*this.volume;
     }
     isFinished() {
         return this._isFinished;
