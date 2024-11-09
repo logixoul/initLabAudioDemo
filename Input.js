@@ -13,10 +13,6 @@ export class Input {
     constructor(app) {
         this.app = app;
 
-        document.getElementById("filterCutoff").oninput = (e) => {
-            app.configuration.filterCutoff = Number(e.target.value);
-            app.onConfigurationChanged();
-        };
         document.getElementById("echoDelay").oninput = (e) => {
             app.configuration.echoDelay = Number(e.target.value);
             app.onConfigurationChanged();
@@ -80,7 +76,7 @@ export class Input {
             }
         });
 
-        this.addSlider("test", ".2");
+        this.addSlider("filterCutoff");
     }
     // https://stackoverflow.com/a/35385518/122687
     htmlToNodes(html) {
@@ -88,14 +84,22 @@ export class Input {
         template.innerHTML = html;
         return template.content;
     }
-    addSlider(id, defaultValue) {
-        const slider = this.htmlToNodes(`
+    addSlider(id) {
+        const defaultValue = this.app.configuration[id];
+        const tagId = `slider-${id}`;
+        const sliderContainer = this.htmlToNodes(`
             <p>
-            <label for="${id}">${id}:</label>
-		    <input type="range" id="${id}" min="0" max="1" step="any" value="${defaultValue}"/>
+            <label for="${tagId}">${id}:</label>
+		    <input type="range" id="${tagId}" min="0" max="1" step="any" value="${defaultValue}"/>
             </p>
-            `)
-        document.getElementsByTagName("body")[0].appendChild(slider);
+            `);
+        const slider = sliderContainer.querySelector("#" + tagId);
+        slider.oninput = (e) => {
+            this.app.configuration[id] = Number(e.target.value);
+            this.app.onConfigurationChanged();
+            console.log("slider moved ", e)
+        };
+        document.getElementsByTagName("body")[0].appendChild(sliderContainer);
     }
 
     handleMidiMessage(msg) {

@@ -2,7 +2,7 @@ import { AudioThreadManager } from "./AudioThreadManager.js";
 import { Input } from "./Input.js"
 
 class Configuration {
-    filterCutoff = 1;
+    filterCutoff = .2;
     oscillatorClassName = "SineOscillator";
     filterClassName = "ExpLowPassFilter"
     sampleRate;
@@ -40,10 +40,8 @@ export class App {
             await this.audioThreadManager.launchThread();
             this.configuration.sampleRate = this.audioThreadManager.sampleRate();
             this.onConfigurationChanged();
-        
-            this.audioThreadRunning = true;
 
-            this.runDrumLoop();
+            this.audioThreadRunning = true;
             document.getElementById("instructions").innerText = "Play with the z/s/x etc keys. Press space to toggle DRUMLOOP.";
         }
     }
