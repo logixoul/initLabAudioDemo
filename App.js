@@ -8,6 +8,8 @@ class Configuration {
     sampleRate;
     echoDelay = 0.5;
     drumLoopEnabled = false;
+    compressionWet = 0.0;
+    compressionSpeed = 0.5;
 }
 
 // https://stackoverflow.com/questions/951021

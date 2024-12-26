@@ -77,6 +77,8 @@ export class Input {
         });
 
         this.addSlider("filterCutoff");
+        this.addSlider("compressionWet");
+        this.addSlider("compressionSpeed");
     }
     // https://stackoverflow.com/a/35385518/122687
     htmlToNodes(html) {

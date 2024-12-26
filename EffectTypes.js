@@ -99,3 +99,20 @@ export class Reverb {
         return sum/this.delayLines.length;
     }
 }
+
+export class Compressor {
+    constructor(configuration) {
+        this.configuration = configuration;
+        this.state = 1;
+
+        this.falloffFactor = Math.exp(-10+20*this.configuration.compressionSpeed)
+    }
+
+    processSample(sample) {
+        this.state = Math.max(this.state, Math.abs(sample));
+        this.state *= .999;
+        const processedSample = sample / (this.state + 0.1);
+        const wet = this.configuration.compressionWet;
+        return wet * processedSample + (1-wet) * sample;
+    }
+}

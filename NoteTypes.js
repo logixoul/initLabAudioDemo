@@ -16,12 +16,17 @@ export class Note {
         this._isReleased = true;
     }
     nextSample() {
+        /*
         if(this._isReleased)
             this.releaseIndex++;
         const envelopeValue = Math.pow(0.99994, this.releaseIndex);
         if(envelopeValue < 0.0001)
             this._isFinished = true;
         return this.osc.nextSample()*envelopeValue*this.volume;
+        */
+        if(this._isReleased)
+            this._isFinished = true;
+        return this.osc.nextSample() * this.volume;
     }
     isFinished() {
         return this._isFinished;

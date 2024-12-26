@@ -12,3 +12,13 @@ TODO:
 - when we send too many messages (over `port`) in a short time, they get very throttled
 - Ask Venci: why subtract 60 here: hardwareKeyCode: msg.key - 60
     ... and centralize it
+
+Features todo (от чата):
+- по-advanced филтри
+- independent pitch shifting/time stretching. Вкл. realtime.
+- how to make things glitch free
+- comfortable oscilloscope/spectroscope
+- Nice-sounding distortion (above and beyond "clipping everything to 1.0f")
+- а защо не и лека полека да си изградим наш си web-based DAW от нулата
+- cool sound design
+- и т.н.
