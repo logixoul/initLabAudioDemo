@@ -55,7 +55,7 @@ class MyAudioProcessor extends AudioWorkletProcessor {
             sample += noteInstance.nextSample();
         sample = this.filter.processSample(sample);
         sample = this.reverb.processSample(sample);
-        sample = this.compressor.processSample(sample);
+        //sample = this.compressor.processSample(sample);
         sample *= .1;
         return sample;
     }
